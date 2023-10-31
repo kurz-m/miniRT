@@ -6,6 +6,6 @@
 # include <unistd.h>
 # include <math.h>
 
-double ft_strtod(char *s);
+double ft_strtod(const char *s);
 
 #endif
