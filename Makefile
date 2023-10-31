@@ -57,6 +57,7 @@ $(OBJ_DIR):
 
 # add any submodule here
 $(LIBFT):
+	@git submodule update --init --recursive
 	@make -C $(LIBFT_DIR) -B --no-print-directory
 
 debug: CFLAGS += -g
