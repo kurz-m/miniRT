@@ -1,5 +1,37 @@
 #include "miniRT.h"
 
+bool	parse_vec(t_vec3d *vec, char *str)
+{
+	char	**args;
+
+	args = ft_split(str, ",");
+	if (!args || ft_arrlen(args) != 3)
+		return (false);
+	
+	return (true);
+}
+
+bool	parse_double(double *val, char *s, double lower, double upper)
+{
+	int		i;
+	bool	point;
+
+	i = 0;
+	point = false;
+	while (s && s[i])
+	{
+		if (s[i] == '.' && !point)
+			point = true;
+		else if ((s[i] == '.' && point) || !ft_isdigit(s[i]))
+			return (ft_error(s, BAD_DOUBLE, NULL));
+		i++;
+	}
+	*val = ft_strtod(s);
+	if (*val > upper || *val < lower)
+		return (ft_error(s, "double value out of bounds!", NULL));
+	return (true);
+}
+
 static bool	parse_line(t_scene *scene, char *line)
 {
 	char	**args;
@@ -8,7 +40,7 @@ static bool	parse_line(t_scene *scene, char *line)
 		return (true);
 	args = ft_split(line, ' ');
 	if (args && ft_strncmp(args[0], "A", 2))
-		return (parse_ambiant(scene, args));
+		return (parse_ambient(scene, args));
 	else if (args && ft_strncmp(args[0], "C", 2))
 		return (parse_cam(scene, args));
 	else if (args && ft_strncmp(args[0], "L", 2))
@@ -19,7 +51,8 @@ static bool	parse_line(t_scene *scene, char *line)
 		return (parse_plane(scene, args));
 	else if (args && ft_strncmp(args[0], "cy", 3))
 		return (parse_cylinder(scene, args));
-	ft_printf("miniRT: error: bad object specifier %s\n", args[0]);
+	else if (args)
+		return (ft_error(args[0], "bad object specifier", NULL));
 	return (false);
 }
 
