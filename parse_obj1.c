@@ -22,9 +22,9 @@ bool	parse_cam(t_scene *scene, char **args)
 	if (ft_arrlen(args) != 4)
 		return (free_arr(args), ft_error3(args, BAD_CAM));
 	if (!parse_vec(&scene->cam.pov, args[1]))
-		return (free_arr(args), ft_error(args[1], BAD_CAM_POV, NULL));
+		return (free_arr(args), ft_error("cam position", args[1], BAD_VEC));
 	if (!parse_vec(&scene->cam.dir, args[2]))
-		return (free_arr(args), ft_error(args[2], BAD_CAM_DIR, NULL));
+		return (free_arr(args), ft_error("cam direction", args[2], BAD_VEC));
 	if (ft_strlen(args[3] > 3))
 		return (free_arr(args), ft_error(args[3], BAD_FOV, NULL));
 	scene->cam.fov = ft_atoi(args[3]);
@@ -46,11 +46,11 @@ bool	parse_lights(t_scene *scene, char **args)
 	l.type = LIGHT;
 	l.color = (t_color){.r = 255, .g = 255, .b = 255};
 	if (!parse_vec(&l.pos, args[1]))
-		return (free_arr(args), ft_error(args[1], BAD_L_POS, NULL));
+		return (free_arr(args), ft_error("light position", args[1], BAD_VEC));
 	if (!parse_double(&l.brightness, args[2], 0, 1))
-		return (free_arr(args), ft_error(args[2], BAD_L_BR, NULL));
+		return (free_arr(args), ft_error("light brightness", args[2], BAD_DOUBLE));
 	if (ft_arrlen(args) == 4 && !parse_color(&l.color, args[3]))
-		return (free_arr(args), ft_error(args[3], BAD_COL, NULL));
+		return (free_arr(args), ft_error("light color", args[3], BAD_COL));
 	nl = malloc(sizeof(t_light));
 	if (!nl)
 		return (free_arr(args), ft_error(MALLOC_ERR, NULL, NULL));

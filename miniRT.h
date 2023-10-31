@@ -8,20 +8,19 @@
 # include <fcntl.h>
 # include "structs.h"
 # include "libft.h"
+# include <limits.h>
 
 # define MULT_AMB "multiple definition of ambient lights!"
 # define BAD_AMB "bad definition of ambient lights!"
 # define MULT_CAM "multiple definitions of camera!"
 # define BAD_CAM "bad definition of camera!"
-# define BAD_CAM_POV "bad camera orientation"
-# define BAD_CAM_DIR "bad camera direction"
 # define BAD_FOV "bad field of view angle"
 # define MALLOC_ERR "malloc error!"
 # define BAD_LAMP "bad definition of light source!"
-# define BAD_L_POS "bad light position vector!"
-# define BAD_L_BR "bad light brightness value!"
 # define BAD_DOUBLE "bad double value!"
-# define BAD_COL "bad definition of color!"
+# define BAD_VEC "bad vector!"
+# define BAD_COL "bad color!"
+# define BAD_SP "bad sphere definition!"
 
 double	ft_strtod(const char *s);
 bool	ft_error(char *m1, char *m2, char *m3);

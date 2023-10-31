@@ -7,7 +7,7 @@
 typedef enum e_type
 {
 	LIGHT,
-	SPERE,
+	SPHERE,
 	PLANE,
 	CYLINDER,
 }	t_type;
