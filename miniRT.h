@@ -23,6 +23,8 @@
 # define BAD_SP "bad sphere definition!"
 # define BAD_PL "bad plane definition!"
 # define BAD_CY "bad cylinder definition!"
+# define BAD_INT "bad integer value!"
+# define VAL_OUB "value out of bounds!"
 
 double	ft_strtod(const char *s);
 bool	ft_error(char *m1, char *m2, char *m3);
