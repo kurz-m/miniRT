@@ -9,6 +9,7 @@ typedef struct s_amb
 {
 	double		ratio;
 	t_color		color;
+	bool		set;
 }	t_amb;
 
 typedef struct	s_cam
@@ -16,6 +17,7 @@ typedef struct	s_cam
 	t_point3d	pov;
 	t_vec3d		dir;
 	uint8_t		fov;
+	bool		set;
 }	t_cam;
 
 typedef struct	s_obj
