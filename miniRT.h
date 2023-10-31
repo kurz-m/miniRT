@@ -9,6 +9,7 @@
 # include "structs.h"
 
 double	ft_strtod(const char *s);
+bool	ft_error(char *msg);
 
 bool	parse(t_scene *scene, char *fn);
 
