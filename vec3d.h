@@ -3,7 +3,8 @@
 
 # include <stdbool.h>
 
-typedef struct s_vec3d {
+typedef struct s_vec3d
+{
 	double	x;
 	double	y;
 	double	z;
