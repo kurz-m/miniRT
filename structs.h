@@ -3,7 +3,14 @@
 
 # include "colors.h"
 # include "vec3d.h"
-# include "libft.h"
+
+typedef enum e_type
+{
+	LIGHT,
+	SPERE,
+	PLANE,
+	CYLINDER,
+}	t_type;
 
 typedef struct s_amb
 {
@@ -22,12 +29,12 @@ typedef struct	s_cam
 
 typedef struct	s_obj
 {
-	int			type;
+	t_type		type;
 }	t_obj;
 
 typedef struct	s_light
 {
-	int			type;
+	t_type		type;
 	t_point3d	pos;
 	double		brightness;
 	t_color		color;
@@ -35,7 +42,7 @@ typedef struct	s_light
 
 typedef struct	s_sphere
 {
-	int			type;
+	t_type		type;
 	t_point3d	pos;
 	double		diameter;
 	t_color		color;
@@ -43,7 +50,7 @@ typedef struct	s_sphere
 
 typedef struct	s_plane
 {
-	int			type;
+	t_type		type;
 	t_point3d	pos;
 	t_vec3d		dir;
 	t_color		color;
@@ -52,7 +59,7 @@ typedef struct	s_plane
 
 typedef struct	s_cylinder
 {
-	int			type;
+	t_type		type;
 	t_point3d	pos;
 	t_vec3d		dir;
 	double		diam;
