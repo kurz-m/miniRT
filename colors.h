@@ -10,4 +10,6 @@ typedef struct	s_color
 	uint8_t	b;
 }	t_color;
 
+uint32_t	get_rgba(int r, int g, int b, int a);
+
 #endif
