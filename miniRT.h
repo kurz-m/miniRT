@@ -7,7 +7,6 @@
 # include <math.h>
 # include <fcntl.h>
 # include "structs.h"
-# include "libft.h"
 # include <limits.h>
 
 # define MULT_AMB "multiple definition of ambient lights!"
@@ -43,5 +42,6 @@ bool	parse_sphere(t_scene *scene, char **args);
 bool	parse_plane(t_scene *scene, char **args);
 bool	parse_cylinder(t_scene *scene, char **args);
 bool	parse_color(t_color *col, char *str);
+bool	parse_int(int *val, char *s, int lower, int upper);
 
 #endif

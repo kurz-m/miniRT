@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "miniRT.h"
 
 bool	parse_ambient(t_scene *scene, char **args)
@@ -25,7 +26,7 @@ bool	parse_cam(t_scene *scene, char **args)
 		return (free_arr(args), ft_error("cam position", args[1], BAD_VEC));
 	if (!parse_vec(&scene->cam.dir, args[2]))
 		return (free_arr(args), ft_error("cam direction", args[2], BAD_VEC));
-	if (ft_strlen(args[3] > 3))
+	if (ft_strlen(args[3]) > 3)
 		return (free_arr(args), ft_error(args[3], BAD_FOV, NULL));
 	scene->cam.fov = ft_atoi(args[3]);
 	if (scene->cam.fov < 0 || scene->cam.fov > 180)

@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "miniRT.h"
 
 static double	get_int_part(const char *s)

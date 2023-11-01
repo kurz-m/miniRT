@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "miniRT.h"
 
 bool	ft_error(char *m1, char *m2, char *m3)

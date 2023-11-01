@@ -1,10 +1,11 @@
+#include "libft.h"
 #include "miniRT.h"
 
 bool	parse_vec(t_vec3d *vec, char *str)
 {
 	char	**args;
 
-	args = ft_split(str, ",");
+	args = ft_split(str, ',');
 	if (!args || ft_arrlen(args) != 3)
 		return (false);
 	if (!parse_double(&vec->x, args[0], -INFINITY, INFINITY)
@@ -14,17 +15,25 @@ bool	parse_vec(t_vec3d *vec, char *str)
 	return (true);
 }
 
+#include <stdio.h>
+
 bool	parse_color(t_color *col, char *str)
 {
 	char	**args;
+	int		r;
+	int		g;
+	int		b;
 
-	args = ft_split(str, ",");
+	args = ft_split(str, ',');
 	if (!args || ft_arrlen(args) != 3)
 		return (false);
-	if (!parse_int((int *)&col->r, args[0], 0, 255)
-		|| !parse_int((int *)&col->g, args[1], 0, 255)
-		|| !parse_int((int *)&col->b, args[2], 0, 255))
+	if (!parse_int(&r, args[0], 0, 255)
+		|| !parse_int(&g, args[1], 0, 255)
+		|| !parse_int(&b, args[2], 0, 255))
 		return (false);
+	col->r = (uint8_t)r;
+	col->g = (uint8_t)g;
+	col->b = (uint8_t)b;
 	return (true);
 }
 
@@ -35,7 +44,7 @@ bool	parse_int(int *val, char *s, int lower, int upper)
 
 	i = 0;
 	if (s && s[i] && (s[i] == '+' || s[i] == '-'))
-		s++;
+		i++;
 	while (s && s[i])
 	{
 		if (!ft_isdigit(s[i]))
@@ -56,6 +65,8 @@ bool	parse_double(double *val, char *s, double lower, double upper)
 
 	i = 0;
 	point = false;
+	if (s && s[i] && (s[i] == '+' || s[i] == '-'))
+		i++;
 	while (s && s[i])
 	{
 		if (s[i] == '.' && !point)
@@ -77,17 +88,17 @@ static bool	parse_line(t_scene *scene, char *line)
 	if (line && ft_strlen(line) == 0)
 		return (true);
 	args = ft_split(line, ' ');
-	if (args && ft_strncmp(args[0], "A", 2))
+	if (args && ft_strncmp(args[0], "A", 2) == 0)
 		return (parse_ambient(scene, args));
-	else if (args && ft_strncmp(args[0], "C", 2))
+	else if (args && ft_strncmp(args[0], "C", 2) == 0)
 		return (parse_cam(scene, args));
-	else if (args && ft_strncmp(args[0], "L", 2))
+	else if (args && ft_strncmp(args[0], "L", 2) == 0)
 		return (parse_lights(scene, args));
-	else if (args && ft_strncmp(args[0], "sp", 3))
+	else if (args && ft_strncmp(args[0], "sp", 3) == 0)
 		return (parse_sphere(scene, args));
-	else if (args && ft_strncmp(args[0], "pl", 3))
+	else if (args && ft_strncmp(args[0], "pl", 3) == 0)
 		return (parse_plane(scene, args));
-	else if (args && ft_strncmp(args[0], "cy", 3))
+	else if (args && ft_strncmp(args[0], "cy", 3) == 0)
 		return (parse_cylinder(scene, args));
 	else if (args)
 		return (ft_error(args[0], "bad object specifier", NULL));
@@ -97,15 +108,19 @@ static bool	parse_line(t_scene *scene, char *line)
 bool	parse(t_scene *scene, char *filepath)
 {
 	int		fd;
+	char	*tmp_line;
 	char	*line;
 
 	fd = open(filepath, O_RDONLY);
-	line = get_next_line(fd);
-	while (line)
+	tmp_line = get_next_line(fd);
+	while (tmp_line)
 	{
+		line = ft_strtrim(tmp_line, "\n");
+		free(tmp_line);
 		if (!parse_line(scene, line))
 			return (false);
-		line = get_next_line(fd);
+		free(line);
+		tmp_line = get_next_line(fd);
 	}
 	return (true);
 }

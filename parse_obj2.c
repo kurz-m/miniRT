@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "miniRT.h"
 
 bool	parse_sphere(t_scene *scene, char **args)

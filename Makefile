@@ -1,4 +1,4 @@
-NAME := <program name>
+NAME := miniRT
 .DEFAULT_GOAL := all
 CC := cc
 
@@ -16,19 +16,22 @@ LOG := printf "[$(BO)$(G)ⓘ INFO$(X)] %s\n"
 ################################################################################
 
 OBJ_DIR := _obj
-INC_DIRS := <all include dirs>
-SRC_DIRS := <all source dirs>
+LIBFT_DIR := libft
+INC_DIRS := include $(LIBFT_DIR)/include
+# SRC_DIRS := <all source dirs>
 
 # Tell the Makefile where headers and source files are
 vpath %.h $(INC_DIRS)
-vpath %.c $(SRC_DIRS)
+# vpath %.c $(SRC_DIRS)
+
+LIBFT = $(LIBFT_DIR)/libft.a
 
 ################################################################################
 ###############                  SOURCE FILES                     ##############
 ################################################################################
 
-SRCS := <all source files>
-SRCS += ...
+SRCS := ft_strtod.c helpers.c main.c parse_obj1.c parse_obj2.c parser.c
+SRCS += vec3d_math.c
 
 OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 
@@ -36,10 +39,9 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 ########                         COMPILING                      ################
 ################################################################################
 
-CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
-LDFLAGS := <add linker flags here>
-# In case of compiling a library
-# ARFLAGS := -rcs
+CFLAGS := -g $(addprefix -I, $(INC_DIRS))
+# CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
+LDFLAGS := -L $(LIBFT_DIR) -lft
 
 all: $(NAME)
 
