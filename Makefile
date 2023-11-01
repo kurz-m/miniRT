@@ -45,7 +45,7 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 CFLAGS := -g $(addprefix -I, $(INC_DIRS))
 # CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
 LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
-LDFLAGS += -ldl -lglfw -pthread 
+LDFLAGS += -ldl -lglfw -pthread -lm
 
 all: $(NAME)
 
