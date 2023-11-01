@@ -17,14 +17,17 @@ LOG := printf "[$(BO)$(G)ⓘ INFO$(X)] %s\n"
 
 OBJ_DIR := _obj
 LIBFT_DIR := libft
-INC_DIRS := include $(LIBFT_DIR)/include
+MLX_DIR := MLX42
+
+INC_DIRS := include $(LIBFT_DIR)/include $(MLX_DIR)/include/MLX42
 # SRC_DIRS := <all source dirs>
 
 # Tell the Makefile where headers and source files are
 vpath %.h $(INC_DIRS)
 # vpath %.c $(SRC_DIRS)
 
-LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT := $(LIBFT_DIR)/libft.a
+MLX42 := $(MLX_DIR)/build/libmlx42.a
 
 ################################################################################
 ###############                  SOURCE FILES                     ##############
@@ -41,11 +44,12 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 
 CFLAGS := -g $(addprefix -I, $(INC_DIRS))
 # CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
-LDFLAGS := -L $(LIBFT_DIR) -lft
+LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
+LDFLAGS += -ldl -lglfw -pthread 
 
 all: $(NAME)
 
-$(NAME): $(OBJS) | $(LIBFT)
+$(NAME): $(OBJS) | $(LIBFT) $(MLX42)
 	@$(LOG) "Linking object files to $@"
 	@$(CC) $^ $(LDFLAGS) -o $@
 
@@ -61,6 +65,10 @@ $(OBJ_DIR):
 $(LIBFT):
 	@git submodule update --init --recursive
 	@make -C $(LIBFT_DIR) -B --no-print-directory
+
+$(MLX42):
+	@git submodule update --init --recursive
+	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
 
 debug: CFLAGS += -g
 debug: fclean all
@@ -82,6 +90,7 @@ fclean: clean
 	else \
 		$(LOG) "No library to clean."; \
 	fi
+	@rm -rf $(MLX_DIR)/build
 
 re: fclean all
 
