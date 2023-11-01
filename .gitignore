@@ -54,3 +54,6 @@ dkms.conf
 # Other files
 .vscode
 .DS_Store
+.ccls
+.ccls-cache
+miniRT
