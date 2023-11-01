@@ -35,6 +35,7 @@ bool	parse_double(double *val, char *s, double lower, double upper);
 
 bool	parse(t_scene *scene, char *fn);
 bool	parse_vec(t_vec3d *vec, char *str);
+bool	parse_norm_vec(t_vec3d *vec, char *str);
 bool	parse_ambient(t_scene *scene, char **args);
 bool	parse_cam(t_scene *scene, char **args);
 bool	parse_lights(t_scene *scene, char **args);
