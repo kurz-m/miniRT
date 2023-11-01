@@ -24,7 +24,7 @@ t_vec3d	vec_norm(t_vec3d v);
 
 double	vec_len(t_vec3d v);
 
-t_vec3d	vec_multiply(t_vec3d v, double scalar);
+t_vec3d	vec_scale(t_vec3d v, double scalar);
 
 bool	vec_equal(t_vec3d v, t_vec3d w);
 

@@ -48,7 +48,7 @@ double	vec_len(t_vec3d v)
 	return (sqrt(vec_dot(v, v)));
 }
 
-t_vec3d	vec_multiply(t_vec3d v, double scalar)
+t_vec3d	vec_scale(t_vec3d v, double scalar)
 {
 	t_vec3d		vector;
 
@@ -62,7 +62,7 @@ t_vec3d	vec_multiply(t_vec3d v, double scalar)
 
 t_vec3d	vec_norm(t_vec3d v)
 {
-	return (vec_multiply(v, 1.0 / vec_len(v)));
+	return (vec_scale(v, 1.0 / vec_len(v)));
 }
 
 bool	vec_equal(t_vec3d v, t_vec3d w)
