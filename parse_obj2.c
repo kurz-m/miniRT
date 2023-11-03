@@ -20,7 +20,7 @@ bool	parse_sphere(t_scene *scene, char **args)
 		return (ft_error(MALLOC_ERR, NULL, NULL));
 	*sp = (t_sphere){.color = s.color, .diameter = s.diameter,
 		.pos = s.pos, .type = s.type};
-	ft_lstadd_back(&scene->objects, ft_lstnew(sp));
+	ft_lstadd_back(&(scene->objects), ft_lstnew(sp));
 	return (true);
 }
 
@@ -43,7 +43,7 @@ bool	parse_plane(t_scene *scene, char **args)
 		return (ft_error(MALLOC_ERR, NULL, NULL));
 	*pl = (t_plane){.color = p.color, .dir = p.dir,
 		.pos = p.pos, .type = p.type};
-	ft_lstadd_back(&scene->objects, ft_lstnew(pl));
+	ft_lstadd_back(&(scene->objects), ft_lstnew(pl));
 	return (true);
 }
 
@@ -70,6 +70,6 @@ bool	parse_cylinder(t_scene *scene, char **args)
 		return (ft_error(MALLOC_ERR, NULL, NULL));
 	*pl = (t_cylinder){.color = p.color, .dir = p.dir,
 		.pos = p.pos, .type = p.type, .diam = p.diam, .height = p.height};
-	ft_lstadd_back(&scene->objects, ft_lstnew(pl));
+	ft_lstadd_back(&(scene->objects), ft_lstnew(pl));
 	return (true);
 }
