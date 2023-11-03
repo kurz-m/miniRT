@@ -1,5 +1,9 @@
 #include "libft.h"
+#include "structs.h"
+#include "parse.h"
+#include "error.h"
 #include "miniRT.h"
+#include <stdbool.h>
 
 bool	parse_ambient(t_scene *scene, char **args)
 {

@@ -1,4 +1,6 @@
 #include "libft.h"
+#include "structs.h"
+#include "parse.h"
 #include "miniRT.h"
 #include "vec3d.h"
 #include "init.h"
@@ -12,8 +14,6 @@
 // -----------------------------------------------------------------------------
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
 #include "MLX42.h"
 
 static mlx_image_t* image;
