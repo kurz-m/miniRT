@@ -24,7 +24,11 @@ typedef struct	s_cam
 	t_point3d	pov;
 	t_vec3d		dir;
 	uint8_t		fov;
+	int			foc;
 	bool		set;
+	t_vec3d		delta_u;
+	t_vec3d		delta_v;
+	t_vec3d		pixel_ul;
 }	t_cam;
 
 typedef struct	s_obj

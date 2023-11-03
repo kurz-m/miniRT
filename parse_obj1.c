@@ -25,11 +25,9 @@ bool	parse_cam(t_scene *scene, char **args)
 		return (ft_error("cam position", args[1], BAD_VEC));
 	if (!parse_norm_vec(&scene->cam.dir, args[2]))
 		return (ft_error("cam direction", args[2], BAD_VEC));
-	if (ft_strlen(args[3]) > 3)
+	if (!parse_int((int *)&scene->cam.fov, args[3], 1, 179))
 		return (ft_error(args[3], BAD_FOV, NULL));
-	scene->cam.fov = ft_atoi(args[3]);
-	if (scene->cam.fov < 0 || scene->cam.fov > 180)
-		return (ft_error(args[3], BAD_FOV, NULL));
+	scene->cam.foc = get_focal_length(scene->cam.fov);
 	scene->cam.set = true;
 	return (true);
 }

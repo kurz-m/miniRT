@@ -24,6 +24,8 @@
 # define BAD_CY "bad cylinder definition!"
 # define BAD_INT "bad integer value!"
 # define VAL_OUB "value out of bounds!"
+# define WIDTH 1280
+# define HEIGHT 720
 
 double	ft_strtod(const char *s);
 bool	ft_error(char *m1, char *m2, char *m3);
@@ -44,5 +46,6 @@ bool	parse_plane(t_scene *scene, char **args);
 bool	parse_cylinder(t_scene *scene, char **args);
 bool	parse_color(t_color *col, char *str);
 bool	parse_int(int *val, char *s, int lower, int upper);
+int		get_focal_length(uint8_t fov);
 
 #endif

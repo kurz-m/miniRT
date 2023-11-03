@@ -12,6 +12,8 @@ typedef struct s_vec3d
 
 typedef t_vec3d	t_point3d;
 
+t_vec3d	vec_new(double x, double y, double z);
+
 t_vec3d	vec_add(t_vec3d v, t_vec3d w);
 
 t_vec3d	vec_sub(t_vec3d v, t_vec3d w);
