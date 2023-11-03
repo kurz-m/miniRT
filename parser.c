@@ -27,8 +27,7 @@ bool	parse_norm_vec(t_vec3d *vec, char *str)
 		|| !parse_double(&vec->y, args[1], -1, 1)
 		|| !parse_double(&vec->z, args[2], -1, 1))
 		return (free_arr(args), false);
-	if (vec_len(*vec) != 1)
-		return (free_arr(args), false);
+	*vec = vec_norm(*vec);
 	free_arr(args);
 	return (true);
 }
