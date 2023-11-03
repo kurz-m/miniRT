@@ -67,7 +67,7 @@ $(LIBFT):
 	@make -C $(LIBFT_DIR) -B --no-print-directory
 
 $(MLX42):
-	git submodule update --init --recursive
+	@git submodule update --init --recursive
 	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
 
 debug: CFLAGS += -g
