@@ -1,4 +1,7 @@
 #include "libft.h"
+#include "structs.h"
+#include "parse.h"
+#include "error.h"
 #include "miniRT.h"
 
 bool	parse_vec(t_vec3d *vec, char *str)

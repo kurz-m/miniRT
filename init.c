@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "structs.h"
 #include "miniRT.h"
 #include "vec3d.h"
 #include "init.h"
