@@ -117,11 +117,9 @@ static bool	parse_line(t_scene *scene, char *line)
 		ret = parse_plane(scene, args);
 	else if (args && ft_strncmp(args[0], "cy", 3) == 0)
 		ret = parse_cylinder(scene, args);
-	else if (args)
+	else if (args && ft_strncmp(args[0], "#", 1) != 0)
 		return (ft_error(args[0], "bad object specifier", NULL),
 			free_arr(args), false);
-	else
-		return (ft_error("fatal", NULL, NULL));
 	free_arr(args);
 	return (ret);
 }

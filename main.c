@@ -3,6 +3,8 @@
 #include "vec3d.h"
 #include "init.h"
 #include "colors.h"
+#include "ray.h"
+#include <pthread.h>
 
 // -----------------------------------------------------------------------------
 // Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
@@ -36,12 +38,68 @@ void ft_hook(void* param)
 
 // -----------------------------------------------------------------------------
 
+bool	hit_sphere(t_scene *scene, t_ray *ray)
+{
+	t_sphere	*sp;
+
+	sp = (t_sphere *)scene->objects->content;
+	t_vec3d	oc = vec_sub(ray->origin, sp->pos);
+	double a = vec_dot(ray->direction, ray->direction);
+	double b = vec_dot(oc, ray->direction) * 2.0;
+	double c = vec_dot(oc, oc) - (sp->diameter * sp->diameter / 4);
+	double disc = b * b - 4 * a * c;
+	return (disc >= 0);
+}
+
+t_color	get_ray_color(t_scene *scene, t_ray *ray)
+{
+	if (hit_sphere(scene, ray))
+		return (color_new(255, 0, 0));
+
+	t_vec3d unit_direction = vec_norm(ray->direction);
+	double a = 0.5 * (unit_direction.y + 1.0);
+	t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
+	t_color end_col = color_scale(color_new(0, 0, 255), a);
+	return color_add(start_col, end_col);
+}
+
+typedef struct s_render
+{
+	t_scene		*scene;
+	mlx_image_t	*image;
+}	t_render;
+
+void	*do_render(void *arg)
+{
+	t_render	*render;
+	t_scene 	*scene;
+	mlx_image_t	*image;
+	t_point3d	pixel_center;
+	t_vec3d		ray_dir;
+	t_ray		ray;
+	t_color		color;
+
+	render = (t_render *)arg;
+	scene = render->scene;
+	image = render->image;
+	for (int j = 0; j < (int)image->height; ++j) {
+		for (int i = 0; i < (int)image->width; ++i) {
+			pixel_center = get_pixel_center(&scene->cam, i, j);
+			ray_dir = vec_sub(pixel_center, scene->cam.pov);
+			ray = ray_new(scene->cam.pov, ray_dir);
+			color = get_ray_color(scene, &ray);
+			mlx_put_pixel(image, i, j, get_rgba_from_tcol(color));
+		}
+	}
+	return (NULL);
+}
+
 int32_t main(int32_t argc, const char* argv[])
 {
 	mlx_t* mlx;
 	t_scene	scene;
-	t_point3d	pixel_center;
-	t_vec3d		ray_dir;
+	pthread_t	*thread;
+	t_render	render;
 
 	scene = (t_scene){};
 	parse(&scene, "test.rt");
@@ -59,29 +117,16 @@ int32_t main(int32_t argc, const char* argv[])
 		puts(mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
-	for (int j = 0; j < (int)image->height; ++j) {
-		for (int i = 0; i < (int)image->width; ++i) {
-			pixel_center = 
-			double r = (double)i / (image->width - 1);
-			double g = (double)j / (image->height - 1);
-			double b = 0;
-
-			int ir = (int)(255 * r);
-			int ig = (int)(255 * g);
-			int ib = (int)(255 * b);
-			uint32_t	color = get_rgba(ir, ig, ib, 255);
-			mlx_put_pixel(image, i, j, color);
-		}
-	}
 	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
 	{
 		mlx_close_window(mlx);
 		puts(mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
-	
-	// mlx_loop_hook(mlx, ft_randomize, mlx);
-	 mlx_loop_hook(mlx, ft_hook, mlx);
+	render = (t_render){.image = image, .scene = &scene};
+	pthread_create(thread, NULL, &do_render, &render);
+
+	mlx_loop_hook(mlx, ft_hook, mlx);
 
 	mlx_loop(mlx);
 	mlx_terminate(mlx);

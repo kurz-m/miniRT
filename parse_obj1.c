@@ -53,6 +53,6 @@ bool	parse_lights(t_scene *scene, char **args)
 		return (ft_error(MALLOC_ERR, NULL, NULL));
 	*nl = (t_light){.type = l.type, .brightness = l.brightness,
 		.color = l.color, .pos = l.pos};
-	ft_lstadd_back(&scene->lights, ft_lstnew(nl));
+	ft_lstadd_back(&(scene->lights), ft_lstnew(nl));
 	return (true);
 }

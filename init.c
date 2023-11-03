@@ -21,8 +21,8 @@ void	init_cam(t_cam *cam)
 
 	tmp_vec = vec_new(1, 0, 0);
 	cam_vec = vec_scale(cam->dir, cam->foc);
-	cam->delta_v = vec_norm(vec_cross(cam_vec, tmp_vec));
-	cam->delta_v = vec_scale(cam->delta_u, HEIGHT);
+	cam->delta_v = vec_norm(vec_cross(tmp_vec, cam_vec));
+	cam->delta_v = vec_scale(cam->delta_v, HEIGHT);
 	cam->delta_u = vec_norm(vec_cross(cam->dir, cam->delta_v));
 	cam->delta_u = vec_scale(cam->delta_u, WIDTH);
 	cam->pixel_ul = calc_pixel_ul(cam, cam_vec);
