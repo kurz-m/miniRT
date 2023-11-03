@@ -53,7 +53,7 @@ $(NAME): $(OBJS) | $(LIBFT) $(MLX42)
 	@$(LOG) "Linking object files to $@"
 	@$(CC) $^ $(LDFLAGS) -o $@
 
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR) $(LIBFT) $(MLX42)
 	@$(LOG) "Compiling $(notdir $@)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
@@ -67,7 +67,7 @@ $(LIBFT):
 	@make -C $(LIBFT_DIR) -B --no-print-directory
 
 $(MLX42):
-	@git submodule update --init --recursive
+	git submodule update --init --recursive
 	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
 
 debug: CFLAGS += -g
