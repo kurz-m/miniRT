@@ -98,7 +98,7 @@ int32_t main(int32_t argc, const char* argv[])
 {
 	mlx_t* mlx;
 	t_scene	scene;
-	pthread_t	*thread;
+	pthread_t	thread;
 	t_render	render;
 
 	scene = (t_scene){};
@@ -124,7 +124,7 @@ int32_t main(int32_t argc, const char* argv[])
 		return(EXIT_FAILURE);
 	}
 	render = (t_render){.image = image, .scene = &scene};
-	pthread_create(thread, NULL, &do_render, &render);
+	pthread_create(&thread, NULL, &do_render, &render);
 
 	mlx_loop_hook(mlx, ft_hook, mlx);
 
