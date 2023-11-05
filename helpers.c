@@ -17,9 +17,9 @@ bool	ft_error(char *m1, char *m2, char *m3)
 	return (false);
 }
 
-bool	ft_error2(char *m1, char *m2, char *m3, void *tofree)
+bool	ft_error2(char *m1, char *m2, char *m3, void *to_free)
 {
-	free(tofree);
+	free(to_free);
 	if (m2 == NULL && m3 == NULL)
 		ft_fprintf(2, "miniRT: error: %s\n", m1);
 	else if (m3 == NULL)
@@ -62,7 +62,7 @@ int	ft_arrlen(char **arr)
 	int	i;
 
 	i = 0;
-	while (arr[i])
+	while (arr[i] != NULL)
 		i++;
 	return (i);
 }

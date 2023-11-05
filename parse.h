@@ -123,6 +123,7 @@ bool	parse_int(int *val, char *s, int lower, int upper);
  * @return true If the parsing of the double was successful
  * @return false If the parsing of the double was unsuccessful
  */
+
 bool	parse_double(double *val, char *s, double lower, double upper);
 
 #endif
