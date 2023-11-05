@@ -18,7 +18,7 @@
 # define VAL_OUB "value out of bounds!"
 
 bool	ft_error(char *m1, char *m2, char *m3);
-bool	ft_error2(char *m1, char *m2, char *m3, void *tofree);
+bool	ft_error2(char *m1, char *m2, char *m3, void *to_free);
 bool	ft_error3(char **arr, char *m1);
 
 #endif

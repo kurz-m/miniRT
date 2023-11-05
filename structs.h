@@ -6,10 +6,10 @@
 
 typedef enum e_type
 {
-	LIGHT,
-	SPHERE,
-	PLANE,
-	CYLINDER,
+	LIGHT = 1 << 0,
+	SPHERE = 1 << 1,
+	PLANE = 1 << 2,
+	CYLINDER = 1 << 3,
 }	t_type;
 
 typedef struct s_amb
