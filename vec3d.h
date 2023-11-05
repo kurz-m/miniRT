@@ -18,15 +18,17 @@ t_vec3d	vec_add(t_vec3d v, t_vec3d w);
 
 t_vec3d	vec_sub(t_vec3d v, t_vec3d w);
 
+t_vec3d	vec_scale(t_vec3d v, double scalar);
+
+double	vec_len(t_vec3d v);
+
 double	vec_dot(t_vec3d v, t_vec3d w);
 
 t_vec3d	vec_cross(t_vec3d v, t_vec3d w);
 
 t_vec3d	vec_norm(t_vec3d v);
 
-double	vec_len(t_vec3d v);
-
-t_vec3d	vec_scale(t_vec3d v, double scalar);
+double	vec_sqr_len(t_vec3d v);
 
 bool	vec_equal(t_vec3d v, t_vec3d w);
 

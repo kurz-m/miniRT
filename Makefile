@@ -34,7 +34,8 @@ MLX42 := $(MLX_DIR)/build/libmlx42.a
 ################################################################################
 
 SRCS := ft_strtod.c helpers.c main.c parse_obj1.c parse_obj2.c parser.c
-SRCS += vec3d_math.c mrt_colors.c camera_utils.c init.c ray.c
+SRCS += mrt_colors.c camera_utils.c init.c ray.c
+SRCS += vec3d_core.c vec3d_products.c vec3d_utils.c
 
 OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 
