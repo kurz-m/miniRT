@@ -1,8 +1,8 @@
+#include <math.h>
 #include "libft.h"
 #include "structs.h"
 #include "vec3d.h"
 #include "miniRT.h"
-#include <math.h>
 
 int	get_focal_length(uint8_t fov)
 {
