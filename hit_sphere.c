@@ -26,7 +26,6 @@ double	hit_sphere(t_scene *scene, t_ray *ray)
 	}
 	else
 	{
-		printf("%f\n", (-half_b - sqrt(disc)) / a);
 		return ((-half_b - sqrt(disc)) / a);
 	}
 }

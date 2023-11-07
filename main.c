@@ -44,16 +44,15 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
 	double		t;
 	t_vec3d		norm;
-	//t_sphere	*sp;
+	t_sphere	*sp;
 	t_color		new;
 
 	t = hit_sphere(scene, ray);
-	// sp = (t_sphere *)scene->objects->content;
-	printf("%f\n", t);
+	sp = (t_sphere *)scene->objects->content;
 	if (t > 0.0)
 	{
-		norm = vec_norm(vec_sub(ray_at(ray, t), vec_new(0, 0, 20.6)));
-		new = color_scale(color_new(norm.x, norm.y, norm.z), 255);
+		norm = vec_norm(vec_sub(ray_at(ray, t), sp->pos));
+		new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
 		new = color_add(new, color_new(255, 255, 255));
 		return (color_scale(new, 0.5));
 	}
