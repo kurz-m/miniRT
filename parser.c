@@ -105,6 +105,7 @@ static bool	parse_line(t_scene *scene, char *line)
 	char	**args;
 	bool	ret;
 
+	ret = false;
 	if (line && ft_strlen(line) == 0)
 		return (true);
 	args = ft_split(line, ' ');
