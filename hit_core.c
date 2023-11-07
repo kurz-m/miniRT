@@ -4,7 +4,6 @@
 #include "vec3d.h"
 #include "ray.h"
 #include "hit.h"
-#include <stdio.h>
 #include "miniRT.h"
 
 bool	hit_objects(t_scene *scene, t_ray *ray, t_hitrec *hitrec)

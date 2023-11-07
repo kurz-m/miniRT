@@ -2,6 +2,7 @@
 # define MINIRT_H
 
 # include <stdlib.h>
+# include <stdio.h>
 # include <unistd.h>
 # include <math.h>
 # include <fcntl.h>

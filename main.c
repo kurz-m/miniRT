@@ -14,7 +14,6 @@
 // See README in the root project for more information.
 // -----------------------------------------------------------------------------
 
-#include <stdio.h>
 #include "MLX42.h"
 
 static mlx_image_t* image;
