@@ -44,9 +44,9 @@ bool	hit_sphere(t_scene *scene, t_ray *ray)
 
 	sp = (t_sphere *)scene->objects->content;
 	t_vec3d	oc = vec_sub(ray->origin, sp->pos);
-	double a = vec_dot(ray->direction, ray->direction);
+	double a = vec_sqr_len(ray->direction);
 	double b = vec_dot(oc, ray->direction) * 2.0;
-	double c = vec_dot(oc, oc) - (sp->diameter * sp->diameter / 4);
+	double c = vec_sqr_len(oc) - (sp->diameter * sp->diameter / 4);
 	double disc = b * b - 4 * a * c;
 	return (disc >= 0);
 }
