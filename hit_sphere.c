@@ -7,11 +7,6 @@
 #include "ray.h"
 #include "hit.h"
 
-// t_vec3d	get_sphere_norm(t_sphere *sp, t_point3d p)
-// {
-// 	return (vec_norm(vec_sub(p, sp->pos)));
-// }
-
 double	hit_sphere(t_sphere *sp, t_ray *ray, t_vec3d *norm)
 {
 	t_list		*objects;

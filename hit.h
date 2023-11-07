@@ -15,8 +15,4 @@ double	hit_sphere(t_sphere *sp, t_ray *ray, t_vec3d *norm);
 double	hit_plane(t_plane *pl, t_ray *ray, t_vec3d *norm);
 double	hit_cylinder(t_cylinder *cy, t_ray *ray, t_vec3d *norm);
 
-// t_vec3d	get_sphere_norm(t_sphere *sp, t_point3d p);
-// t_vec3d	get_cylinder_norm(t_cylinder *cy, t_point3d p);
-
-
 #endif

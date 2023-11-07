@@ -39,17 +39,6 @@ void ft_hook(void* param)
 
 // -----------------------------------------------------------------------------
 
-
-// t_vec3d	get_normal(t_obj *obj, t_point3d p)
-// {
-// 	if (obj->type == SPHERE)
-// 		return (get_sphere_norm(obj, p));
-// 	else if (obj->type == CYLINDER)
-// 		return (get_cylinder_norm(obj, p));
-// 	else if (obj->type == PLANE)
-// 		return (get_plane_norm(obj, p));
-// }
-
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
 	t_color		new;
@@ -63,11 +52,12 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 		new = color_add(new, color_new(255, 255, 255));
 		return (color_scale(new, 0.5));
 	}
-	t_vec3d unit_direction = vec_norm(ray->direction);
-	double a = 0.5 * (unit_direction.y + 1.0);
-	t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
-	t_color end_col = color_scale(color_new(0, 0, 255), a);
-	return color_add(start_col, end_col);
+	// t_vec3d unit_direction = vec_norm(ray->direction);
+	// double a = 0.5 * (unit_direction.y + 1.0);
+	// t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
+	// t_color end_col = color_scale(color_new(0, 0, 255), a);
+	// return color_add(start_col, end_col);
+	return (color_new(0,0,0));
 }
 
 typedef struct s_render

@@ -26,7 +26,7 @@ bool	hit_objects(t_scene *scene, t_ray *ray, t_hitrec *hitrec)
 			t = hit_cylinder((t_cylinder *)curr_obj, ray, &norm);
 		else if (curr_obj->type == PLANE)
 			t = hit_plane((t_plane *)curr_obj, ray, &norm);
-		if (0.0 < t < hitrec->t)
+		if (0.0 < t && t < hitrec->t)
 		{
 			hitrec->t = t;
 			hitrec->obj = curr_obj;
