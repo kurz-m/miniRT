@@ -9,6 +9,8 @@
 
 # define WIDTH 1280
 # define HEIGHT 720
+# define T_MIN 1e-6
+# define T_MAX 1000
 
 double	ft_strtod(const char *s);
 int		ft_arrlen(char **arr);

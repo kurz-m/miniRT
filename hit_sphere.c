@@ -7,13 +7,16 @@
 #include "ray.h"
 #include "hit.h"
 
-double	hit_sphere(t_scene *scene, t_ray *ray)
+// t_vec3d	get_sphere_norm(t_sphere *sp, t_point3d p)
+// {
+// 	return (vec_norm(vec_sub(p, sp->pos)));
+// }
+
+double	hit_sphere(t_sphere *sp, t_ray *ray, t_vec3d *norm)
 {
 	t_list		*objects;
-	t_sphere	*sp;
+	double		t;
 
-	objects = (t_list *)scene->objects;
-	sp = (t_sphere *)objects->content;
 	t_vec3d	oc = vec_sub(ray->origin, sp->pos);
 	double a = vec_sqr_len(ray->direction);
 	double half_b = vec_dot(oc, ray->direction);
@@ -21,11 +24,11 @@ double	hit_sphere(t_scene *scene, t_ray *ray)
 	double disc = half_b * half_b -  a * c;
 
 	if (disc < 0)
-	{
 		return (-1.0);
-	}
 	else
 	{
-		return ((-half_b - sqrt(disc)) / a);
+		t = (-half_b - sqrt(disc)) / a;
+		*norm = vec_norm(vec_sub(ray_at(ray, t), sp->pos));
+		return (t);
 	}
 }

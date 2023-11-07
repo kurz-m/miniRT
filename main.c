@@ -40,23 +40,29 @@ void ft_hook(void* param)
 // -----------------------------------------------------------------------------
 
 
+// t_vec3d	get_normal(t_obj *obj, t_point3d p)
+// {
+// 	if (obj->type == SPHERE)
+// 		return (get_sphere_norm(obj, p));
+// 	else if (obj->type == CYLINDER)
+// 		return (get_cylinder_norm(obj, p));
+// 	else if (obj->type == PLANE)
+// 		return (get_plane_norm(obj, p));
+// }
+
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
-	double		t;
-	t_vec3d		norm;
-	t_sphere	*sp;
 	t_color		new;
+	t_hitrec	hitrec;
+	t_vec3d		norm;
 
-	t = hit_sphere(scene, ray);
-	sp = (t_sphere *)scene->objects->content;
-	if (t > 0.0)
+	if (hit_objects(scene, ray, &hitrec))
 	{
-		norm = vec_norm(vec_sub(ray_at(ray, t), sp->pos));
+		norm = hitrec.normal;
 		new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
 		new = color_add(new, color_new(255, 255, 255));
 		return (color_scale(new, 0.5));
 	}
-
 	t_vec3d unit_direction = vec_norm(ray->direction);
 	double a = 0.5 * (unit_direction.y + 1.0);
 	t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
