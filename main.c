@@ -6,6 +6,7 @@
 #include "init.h"
 #include "colors.h"
 #include "ray.h"
+#include "hit.h"
 #include <pthread.h>
 
 // -----------------------------------------------------------------------------
@@ -38,23 +39,24 @@ void ft_hook(void* param)
 
 // -----------------------------------------------------------------------------
 
-bool	hit_sphere(t_scene *scene, t_ray *ray)
-{
-	t_sphere	*sp;
-
-	sp = (t_sphere *)scene->objects->content;
-	t_vec3d	oc = vec_sub(ray->origin, sp->pos);
-	double a = vec_sqr_len(ray->direction);
-	double b = vec_dot(oc, ray->direction) * 2.0;
-	double c = vec_sqr_len(oc) - (sp->diameter * sp->diameter / 4);
-	double disc = b * b - 4 * a * c;
-	return (disc >= 0);
-}
 
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
-	if (hit_sphere(scene, ray))
-		return (color_new(255, 0, 0));
+	double		t;
+	t_vec3d		norm;
+	//t_sphere	*sp;
+	t_color		new;
+
+	t = hit_sphere(scene, ray);
+	// sp = (t_sphere *)scene->objects->content;
+	printf("%f\n", t);
+	if (t > 0.0)
+	{
+		norm = vec_norm(vec_sub(ray_at(ray, t), vec_new(0, 0, 20.6)));
+		new = color_scale(color_new(norm.x, norm.y, norm.z), 255);
+		new = color_add(new, color_new(255, 255, 255));
+		return (color_scale(new, 0.5));
+	}
 
 	t_vec3d unit_direction = vec_norm(ray->direction);
 	double a = 0.5 * (unit_direction.y + 1.0);
