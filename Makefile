@@ -1,6 +1,5 @@
 NAME := miniRT
-.DEFAULT_GOAL := all
-.MAKEFLAGS := -j4
+.DEFAULT_GOAL := multi
 CC := cc
 
 ################################################################################
@@ -47,12 +46,12 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 ########                         COMPILING                      ################
 ################################################################################
 
-CFLAGS := -g $(addprefix -I, $(INC_DIRS))
+CFLAGS := -O3 -g $(addprefix -I, $(INC_DIRS))
 # CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
 LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
 LDFLAGS += -ldl -lglfw -pthread -lm
 
-all: $(NAME)
+all: submodules $(NAME)
 
 $(NAME): $(LIBFT) $(MLX42) $(OBJS)
 	@$(LOG) "Linking object files to $@"
@@ -67,12 +66,17 @@ $(OBJ_DIR):
 	@mkdir -p $@
 
 # add any submodule here
+# check if submodule needs to be initialized
+submodules:
+	@if git submodule status | egrep -q '^[-+]' ; then \
+		echo "INFO: Need to reinitialize git submodules"; \
+		git submodule update --init; \
+	fi
+
 $(LIBFT):
-	@git submodule update --init --recursive
 	@make -C $(LIBFT_DIR) -B --no-print-directory
 
 $(MLX42):
-	@git submodule update --init --recursive
 	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
 
 debug: CFLAGS += -g
@@ -101,4 +105,7 @@ re: fclean all
 
 -include $(OBJS:%.o=%.d)
 
-.PHONY: all fclean clean re
+.PHONY: all fclean clean re submodules multi
+
+multi:
+	$(MAKE) -j8 all
