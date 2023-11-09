@@ -8,9 +8,11 @@ CC := cc
 ################################################################################
 
 G := \033[32m
+M := \033[35m
 X := \033[0m
 BO := $(shell tput bold)
 LOG := printf "[$(BO)$(G)ⓘ INFO$(X)] %s\n"
+WARN := printf "[$(BO)$(M)ⓘ WARN$(X)] %s\n"
 
 ################################################################################
 ###############                  DIRECTORIES                      ##############
@@ -52,11 +54,11 @@ LDFLAGS += -ldl -lglfw -pthread -lm
 
 all: $(NAME)
 
-$(NAME): $(OBJS) | $(LIBFT) $(MLX42)
+$(NAME): $(LIBFT) $(MLX42) $(OBJS)
 	@$(LOG) "Linking object files to $@"
 	@$(CC) $^ $(LDFLAGS) -o $@
 
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR) $(LIBFT) $(MLX42)
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@$(LOG) "Compiling $(notdir $@)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
@@ -79,7 +81,7 @@ debug: fclean all
 clean:
 	@$(MAKE) -C ./libft/ clean --no-print-directory
 	@if [ -d "$(OBJ_DIR)" ]; then \
-		$(LOG) "Cleaning $(notdir $(OBJ_DIR))"; \
+		$(WARN) "Cleaning $(notdir $(OBJ_DIR))"; \
 		rm -rf $(OBJ_DIR); \
 	else \
 		$(LOG) "No objects to clean."; \
@@ -88,10 +90,10 @@ clean:
 fclean: clean
 	@$(MAKE) -C ./libft/ fclean --no-print-directory
 	@if [ -f "$(NAME)" ]; then \
-		$(LOG) "Cleaning $(notdir $(NAME))"; \
+		$(WARN) "Cleaning $(notdir $(NAME))"; \
 		rm -f $(NAME); \
 	else \
-		$(LOG) "No library to clean."; \
+		$(LOG) "No binary to clean."; \
 	fi
 	@rm -rf $(MLX_DIR)/build
 
