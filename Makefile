@@ -51,7 +51,7 @@ CFLAGS := -O3 -g $(addprefix -I, $(INC_DIRS))
 LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
 LDFLAGS += -ldl -lglfw -pthread -lm
 
-all: submodules $(NAME)
+all: $(NAME)
 
 $(NAME): $(LIBFT) $(MLX42) $(OBJS)
 	@$(LOG) "Linking object files to $@"
@@ -107,5 +107,5 @@ re: fclean all
 
 .PHONY: all fclean clean re submodules multi
 
-multi:
+multi: submodules
 	$(MAKE) -j8 all
