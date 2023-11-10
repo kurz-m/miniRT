@@ -20,13 +20,17 @@ static mlx_image_t* image;
 
 // -----------------------------------------------------------------------------
 
-void ft_hook(void* param)
-{
-	mlx_t* mlx = param;
 
-	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(mlx);
-}
+
+// void ft_hook(void* param)
+// {
+// 	mlx_t* mlx = param;
+
+// 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
+// 		mlx_close_window(mlx);
+// }
+
+
 
 // -----------------------------------------------------------------------------
 
@@ -57,6 +61,13 @@ typedef struct s_render
 	mlx_image_t	*image;
 }	t_render;
 
+typedef struct s_param
+{
+	mlx_t		*mlx;
+	pthread_t	thread;
+	t_render	render;
+}	t_param;
+
 void	*do_render(void *arg)
 {
 	t_render	*render;
@@ -82,12 +93,60 @@ void	*do_render(void *arg)
 	return (NULL);
 }
 
+static void	move_cam(t_scene *sc, t_vec3d mov)
+{
+	sc->cam.pov = vec_add(sc->cam.pov, mov);
+}
+
+// static void	turn_cam(t_scene *sc, int horizontal, int vertical)
+// {
+// 	t_vec3d	new;
+
+// 	if (horizontal)
+// 		new.y = 0;
+// 	else if(vertical)
+// 		new.x = 0;
+	
+// }
+
+void	ft_turn_hook(void *in)
+{
+	t_param		*param;
+	static bool	changed;
+
+	param = (t_param *)in;
+	if (mlx_is_key_down(param->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(param->mlx);
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_D))
+	// 	move_cam(param->render.scene, vec_new(2,0,0)), changed = true;
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_A))
+	// 	move_cam(param->render.scene, vec_new(-2,0,0)), changed = true;
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_W))
+	// 	move_cam(param->render.scene, vec_new(0,2,0)), changed = true;
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_S))
+	// 	move_cam(param->render.scene, vec_new(0,-2,0)), changed = true;
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_UP))
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_DOWN))
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_LEFT))
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_RIGHT))
+	// if (changed)
+	// {
+	// 	if (param->thread)
+	// 	{
+	// 		// pthread_kill(param->thread, SIGINT);
+	// 		pthread_cancel(param->thread);
+	// 		pthread_join(param->thread, NULL);
+	// 	}
+	// 	pthread_create(&param->thread, NULL, &do_render, &(param->render));
+	// 	changed = false;
+	// }
+}
+
 int32_t main(int32_t argc, const char* argv[])
 {
 	mlx_t* mlx;
 	t_scene	scene;
-	pthread_t	thread;
-	t_render	render;
+	t_param		param;
 
 	scene = (t_scene){};
 	parse(&scene, "test.rt");
@@ -111,10 +170,15 @@ int32_t main(int32_t argc, const char* argv[])
 		puts(mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
-	render = (t_render){.image = image, .scene = &scene};
-	pthread_create(&thread, NULL, &do_render, &render);
 
-	mlx_loop_hook(mlx, ft_hook, mlx);
+	param = (t_param)
+	{
+		.mlx = mlx,
+		.render = (t_render){.image = image, .scene = &scene},
+	};
+	pthread_create(&param.thread, NULL, &do_render, &(param.render));
+	// mlx_loop_hook(mlx, ft_hook, mlx);
+	mlx_loop_hook(mlx, ft_turn_hook, &param);
 
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
