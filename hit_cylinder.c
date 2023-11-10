@@ -98,10 +98,15 @@ double	hit_cylinder(t_cylinder *cy, t_ray *ray, t_vec3d *norm)
 	i = find_smallest_pos_t(t);
 	if (i == -1)
 		return (-1.0);
-	else if (i < 2)
+	else if (i == 0)
 	{
 		if (norm)
 			*norm = cy->dir;
+	}
+	else if (i == 1)
+	{
+		if (norm)
+			*norm = vec_scale(cy->dir, -1.);
 	}
 	else if (i == 2)
 	{
