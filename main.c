@@ -33,6 +33,25 @@ static mlx_image_t* image;
 
 // -----------------------------------------------------------------------------
 
+// ambient color model: the ambient color vector is used as a scale for the 
+// obj color. 
+// see here https://learnwebgl.brown37.net/09_lights/lights_ambient.html
+t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
+{
+	double	hr;
+	double	hg;
+	double	hb;
+
+	hr = sc->amb.color.r * sc->amb.ratio / 255;
+	hg = sc->amb.color.g * sc->amb.ratio / 255;
+	hb = sc->amb.color.b * sc->amb.ratio / 255;
+	return ((t_color){
+		.r = hit->obj->color.r * hr,
+		.g = hit->obj->color.g * hg,
+		.b = hit->obj->color.b * hb
+	});
+}
+
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
 	t_color		new;
@@ -41,17 +60,18 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 
 	if (hit_objects(scene, ray, &hitrec))
 	{
-		norm = hitrec.normal;
-		new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
-		new = color_add(new, color_new(255, 255, 255));
-		return (color_scale(new, 0.5));
+		return (get_ambient_color(scene, &hitrec));
+		// norm = hitrec.normal;
+		// new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
+		// new = color_add(new, color_new(255, 255, 255));
+		// return (color_scale(new, 0.5));
 	}
-	// t_vec3d unit_direction = vec_norm(ray->dir);
-	// double a = 0.5 * (unit_direction.y + 1.0);
-	// t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
-	// t_color end_col = color_scale(color_new(0, 0, 255), a);
-	// return color_add(start_col, end_col);
-	return (color_new(0,0,0));
+	t_vec3d unit_direction = vec_norm(ray->dir);
+	double a = 0.5 * (unit_direction.y + 1.0);
+	t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
+	t_color end_col = color_scale(color_new(0, 0, 255), a);
+	return color_add(start_col, end_col);
+	// return (color_new(0,0,0));
 }
 
 typedef struct s_render
@@ -86,7 +106,6 @@ void	*do_render(void *arg)
 			ray_dir = vec_sub(pixel_center, scene->cam.pov);
 			ray = ray_new(scene->cam.pov, ray_dir);
 			color = get_ray_color(scene, &ray);
-			// color = color_new(0,0,0);
 			for (int samples = 0; samples < AA_SAMPLES - 1; samples++) {
 				pixel_center = get_pixel_random(&scene->cam, i, j);
 				ray_dir = vec_sub(pixel_center, scene->cam.pov);

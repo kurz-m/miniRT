@@ -34,41 +34,42 @@ typedef struct	s_cam
 typedef struct	s_obj
 {
 	t_type		type;
+	t_color		color;
 }	t_obj;
 
 typedef struct	s_light
 {
 	t_type		type;
+	t_color		color;
 	t_point3d	pos;
 	double		brightness;
-	t_color		color;
 }	t_light;
 
 typedef struct	s_sphere
 {
 	t_type		type;
+	t_color		color;
 	t_point3d	pos;
 	double		diameter;
-	t_color		color;
 }	t_sphere;
 
 typedef struct	s_plane
 {
 	t_type		type;
+	t_color		color;
 	t_point3d	pos;
 	t_vec3d		dir;
-	t_color		color;
 }	t_plane;
 
 
 typedef struct	s_cylinder
 {
 	t_type		type;
+	t_color		color;
 	t_point3d	pos;
 	t_vec3d		dir;
 	double		diam;
 	double		height;
-	t_color		color;
 }	t_cylinder;
 
 typedef struct	s_scene
