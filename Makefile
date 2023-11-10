@@ -46,7 +46,7 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 ########                         COMPILING                      ################
 ################################################################################
 
-CFLAGS := -O3 -g $(addprefix -I, $(INC_DIRS))
+CFLAGS := -g $(addprefix -I, $(INC_DIRS))
 # CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
 LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
 LDFLAGS += -ldl -lglfw -pthread -lm
@@ -101,7 +101,7 @@ fclean: clean
 	fi
 	@rm -rf $(MLX_DIR)/build
 
-re: fclean all
+re: fclean multi
 
 -include $(OBJS:%.o=%.d)
 
