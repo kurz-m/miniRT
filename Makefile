@@ -40,6 +40,8 @@ SRCS += mrt_colors.c camera_utils.c init.c ray.c
 SRCS += vec3d_core.c vec3d_products.c vec3d_utils.c hit_sphere.c
 SRCS += hit_core.c hit_plane.c hit_cylinder.c
 
+HEADS := colors.h error.h hit.h init.h miniRT.h parse.h ray.h structs.h vec3d.h
+
 OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 
 ################################################################################
@@ -57,7 +59,7 @@ $(NAME): $(LIBFT) $(MLX42) $(OBJS)
 	@$(LOG) "Linking object files to $@"
 	@$(CC) $^ $(LDFLAGS) -o $@
 
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c $(HEADS) | $(OBJ_DIR)
 	@$(LOG) "Compiling $(notdir $@)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
