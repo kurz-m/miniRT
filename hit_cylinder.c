@@ -22,6 +22,7 @@ static double	hit_disk(t_plane *pl, t_ray *ray, double radius)
 	return (-1.0);
 }
 
+// see https://hugi.scene.org/online/hugi24/coding%20graphics%20chris%20dragan%20raytracing%20shapes.htm for reference
 static double	hit_cyl_wall(t_cylinder *cy, t_ray *ray)
 {
 	double	t;
@@ -62,7 +63,7 @@ static int	find_smallest_pos_t(double *t)
 		}
 		if (smallest_pos < 0)
 			smallest_pos = i;
-		else if (t[smallest_pos] > t[i])
+		else if (t[i] < t[smallest_pos])
 			smallest_pos = i;
 		i++;
 	}
@@ -78,7 +79,7 @@ static void	get_surf_norm_cyl(t_cylinder *cy, t_ray *ray, double t, t_vec3d *nor
 	x = vec_sub(ray->origin, cy->pos);
 	m = vec_dot(ray->dir, vec_scale(cy->dir, t)) + vec_dot(x, cy->dir);
 	p = ray_at(ray, t);
-	*norm = vec_norm(vec_sub(p, vec_sub(cy->pos, vec_scale(cy->dir, m))));
+	*norm = vec_norm(vec_sub(vec_sub(p, cy->pos), vec_scale(cy->dir, m)));
 }
 
 double	hit_cylinder(t_cylinder *cy, t_ray *ray, t_vec3d *norm)
@@ -94,7 +95,6 @@ double	hit_cylinder(t_cylinder *cy, t_ray *ray, t_vec3d *norm)
 		.pos = vec_add(cy->pos, vec_scale(cy->dir, -(cy->height / 2)))},
 		ray, cy->diam / 2);
 	t[2] = hit_cyl_wall(cy, ray);
-
 	i = find_smallest_pos_t(t);
 	if (i == -1)
 		return (-1.0);
