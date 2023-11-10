@@ -8,6 +8,7 @@
 #include "ray.h"
 #include "hit.h"
 #include <pthread.h>
+#include <time.h>
 
 // -----------------------------------------------------------------------------
 // Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
@@ -29,8 +30,6 @@ static mlx_image_t* image;
 // 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 // 		mlx_close_window(mlx);
 // }
-
-
 
 // -----------------------------------------------------------------------------
 
@@ -87,6 +86,13 @@ void	*do_render(void *arg)
 			ray_dir = vec_sub(pixel_center, scene->cam.pov);
 			ray = ray_new(scene->cam.pov, ray_dir);
 			color = get_ray_color(scene, &ray);
+			// color = color_new(0,0,0);
+			for (int samples = 0; samples < AA_SAMPLES - 1; samples++) {
+				pixel_center = get_pixel_random(&scene->cam, i, j);
+				ray_dir = vec_sub(pixel_center, scene->cam.pov);
+				ray = ray_new(scene->cam.pov, ray_dir);
+				color = color_scale(color_add(get_ray_color(scene, &ray), color), 0.5);
+			}
 			mlx_put_pixel(image, i, j, get_rgba_from_tcol(color));
 		}
 	}
@@ -151,6 +157,7 @@ int32_t main(int32_t argc, const char* argv[])
 	scene = (t_scene){};
 	parse(&scene, "test.rt");
 	init_cam(&scene.cam);
+	srand(time(NULL));
 
 	// Gotta error check this stuff
 	if (!(mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
