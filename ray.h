@@ -3,7 +3,7 @@
 
 typedef struct	s_ray {
 	t_point3d	origin;
-	t_vec3d		direction;
+	t_vec3d		dir;
 }	t_ray;
 
 /// @brief Creates a new ray with the given origin and the direction

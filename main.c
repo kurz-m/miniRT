@@ -43,7 +43,7 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 		new = color_add(new, color_new(255, 255, 255));
 		return (color_scale(new, 0.5));
 	}
-	// t_vec3d unit_direction = vec_norm(ray->direction);
+	// t_vec3d unit_direction = vec_norm(ray->dir);
 	// double a = 0.5 * (unit_direction.y + 1.0);
 	// t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
 	// t_color end_col = color_scale(color_new(0, 0, 255), a);

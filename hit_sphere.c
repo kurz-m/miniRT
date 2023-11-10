@@ -12,8 +12,8 @@ double	hit_sphere(t_sphere *sp, t_ray *ray, t_vec3d *norm)
 	double		t;
 
 	t_vec3d	oc = vec_sub(ray->origin, sp->pos);
-	double a = vec_sqr_len(ray->direction);
-	double half_b = vec_dot(oc, ray->direction);
+	double a = vec_sqr_len(ray->dir);
+	double half_b = vec_dot(oc, ray->dir);
 	double c = vec_sqr_len(oc) - (sp->diameter * sp->diameter / 4);
 	double disc = half_b * half_b -  a * c;
 
