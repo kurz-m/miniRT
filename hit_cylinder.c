@@ -62,7 +62,7 @@ static int	find_smallest_pos_t(double *t)
 		}
 		if (smallest_pos < 0)
 			smallest_pos = i;
-		else if (smallest_pos > t[i])
+		else if (t[smallest_pos] > t[i])
 			smallest_pos = i;
 		i++;
 	}
