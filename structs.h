@@ -28,7 +28,7 @@ typedef struct	s_cam
 	bool		set;
 	t_vec3d		delta_u;
 	t_vec3d		delta_v;
-	t_vec3d		pixel_ul; // center of upper left pixel
+	t_vec3d		pixel_ul;
 }	t_cam;
 
 typedef struct	s_light

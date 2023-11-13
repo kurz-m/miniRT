@@ -52,7 +52,7 @@ bool	parse_lights(t_parse *p, char **args)
 		return (ft_error("light brightness", args[2], BAD_DOUBLE));
 	if (ft_arrlen(args) == 4 && !parse_color(&l.color, args[3]))
 		return (ft_error("light color", args[3], BAD_COL));
-	nl = malloc(sizeof(t_light));
+	nl = malloc(sizeof(t_obj));
 	if (!nl)
 		return (ft_error(MALLOC_ERR, NULL, NULL));
 	*nl = (t_obj){.type = l.type, .light.brightness = l.light.brightness,
