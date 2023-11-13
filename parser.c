@@ -131,53 +131,53 @@ static bool	parse_line(t_parse *p, char *line)
 void	copy_lights(t_scene *scene, t_parse *parse)
 {
 	t_list	*light;
-	t_light	*content;
+	t_obj	*content;
 	int		i;
 
 	i = 0;
 	light = parse->lights;
 	while (light)
 	{
-		content = (t_light *)light->content;
-		scene->lights[i++] = (t_light){
+		content = (t_obj *)light->content;
+		scene->lights[i++] = (t_obj){
 			.type = content->type,
 			.color = content->color,
 			.pos = content->pos,
-			.brightness = content->brightness,
+			.light.brightness = content->light.brightness,
 		};
 		light = light->next;
 	}
 }
 
-void	copy_sphere(t_scene *scene, t_sphere *sp, int i)
+void	copy_sphere(t_scene *scene, t_obj *obj, int i)
 {
-	scene->objs[i].sp = (t_sphere){
-		.type = sp->type,
-		.color = sp->color,
-		.pos = sp->pos,
-		.diameter = sp->diameter,
+	scene->objs[i] = (t_obj){
+		.type = obj->type,
+		.color = obj->color,
+		.pos = obj->pos,
+		.sp.diameter = obj->sp.diameter,
 	};
 }
 
-void	copy_cylinder(t_scene *scene, t_cylinder *cy, int i)
+void	copy_cylinder(t_scene *scene, t_obj *obj, int i)
 {
-	scene->objs[i].cy = (t_cylinder){
-		.type = cy->type,
-		.color = cy->color,
-		.pos = cy->pos,
-		.dir = cy->dir,
-		.diam = cy->diam,
-		.height = cy->height,
+	scene->objs[i] = (t_obj){
+		.type = obj->type,
+		.color = obj->color,
+		.pos = obj->pos,
+		.cy.dir = obj->cy.dir,
+		.cy.diam = obj->cy.diam,
+		.cy.height = obj->cy.height,
 	};
 }
 
-void	copy_plane(t_scene *scene, t_plane *pl, int i)
+void	copy_plane(t_scene *scene, t_obj *obj, int i)
 {
-	scene->objs[i].pl = (t_plane){
-		.type = pl->type,
-		.color = pl->color,
-		.pos = pl->pos,
-		.dir = pl->dir,
+	scene->objs[i] = (t_obj){
+		.type = obj->type,
+		.color = obj->color,
+		.pos = obj->pos,
+		.pl.dir = obj->pl.dir,
 	};
 }
 
@@ -191,13 +191,13 @@ void	copy_objs(t_scene *scene, t_parse *parse)
 	obj = parse->objects;
 	while (obj)
 	{
-		curr_obj = obj->content;
+		curr_obj = (t_obj* )obj->content;
 		if (curr_obj->type == SPHERE)
-			copy_sphere(scene, (t_sphere *)curr_obj, i) ;
+			copy_sphere(scene, curr_obj, i) ;
 		else if (curr_obj->type == CYLINDER)
-			copy_cylinder(scene, (t_cylinder *)curr_obj, i);
+			copy_cylinder(scene, curr_obj, i);
 		else if (curr_obj->type == PLANE)
-			copy_plane(scene, (t_plane *)curr_obj, i);
+			copy_plane(scene, curr_obj, i);
 		obj = obj->next;
 		++i;
 	}
@@ -215,10 +215,10 @@ bool	init_obj(t_scene *scene, t_parse *parse)
 	light_size = ft_lstsize(parse->lights);
 	obj_size = ft_lstsize(parse->objects);
 	// TODO: check if this is a bug that creates a segf when not adding +1
-	scene->lights = ft_calloc(light_size + 1, sizeof(t_light));
+	scene->lights = ft_calloc(light_size + 1, sizeof(t_obj));
 	scene->n_light = light_size;
 	// TODO: check if this is a bug that creates a segf when not adding +1
-	scene->objs = ft_calloc(light_size + 1, sizeof(t_objs));
+	scene->objs = ft_calloc(light_size + 1, sizeof(t_obj));
 	scene->n_obj = obj_size;
 	// TODO: catch malloc fail (free stuff on error)
 	if (scene->lights == NULL || scene->objs == NULL)

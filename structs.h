@@ -31,61 +31,42 @@ typedef struct	s_cam
 	t_vec3d		pixel_ul; // center of upper left pixel
 }	t_cam;
 
-typedef struct	s_obj
-{
-	t_type		type;
-	t_color		color;
-}	t_obj;
-
-typedef struct	s_utils
-{
-	t_type		type;
-	t_color		color;
-}	t_utils;
-
-
 typedef struct	s_light
 {
-	t_type		type;
-	t_color		color;
-	t_point3d	pos;
 	double		brightness;
 }	t_light;
 
 typedef struct	s_sphere
 {
-	t_type		type;
-	t_color		color;
-	t_point3d	pos;
 	double		diameter;
 }	t_sphere;
 
 typedef struct	s_plane
 {
-	t_type		type;
-	t_color		color;
-	t_point3d	pos;
 	t_vec3d		dir;
 }	t_plane;
 
 
 typedef struct	s_cylinder
 {
-	t_type		type;
-	t_color		color;
-	t_point3d	pos;
 	t_vec3d		dir;
 	double		diam;
 	double		height;
 }	t_cylinder;
 
-typedef union	u_obj
+typedef struct	s_obj
 {
-	t_utils		u;
-	t_sphere	sp;
-	t_plane		pl;
-	t_cylinder	cy;
-}	t_objs;
+	t_type		type;
+	t_color		color;
+	t_point3d	pos;
+	union
+	{
+		t_light		light;
+		t_sphere	sp;
+		t_plane		pl;
+		t_cylinder	cy;
+	};
+}	t_obj;
 
 typedef struct	s_parse
 {
@@ -99,9 +80,9 @@ typedef struct	s_scene
 {
 	t_amb	amb;
 	t_cam	cam;
-	t_light	*lights;
+	t_obj	*lights;
 	int		n_light;
-	t_objs	*objs;
+	t_obj	*objs;
 	int		n_obj;
 }	t_scene;
 

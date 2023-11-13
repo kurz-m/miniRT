@@ -6,15 +6,15 @@
 #include "ray.h"
 #include "hit.h"
 
-static double	hit_disk(t_plane *pl, t_ray *ray, double radius)
+static double	hit_disk(t_obj *obj, t_ray *ray, double radius)
 {
 	double	t;
 
-	t = hit_plane(pl, ray, NULL);
+	t = hit_plane(obj, ray, NULL);
 	if (t >= 0)
 	{
 		t_vec3d	p = ray_at(ray, t);
-		t_vec3d	v = vec_sub(p, pl->pos);
+		t_vec3d	v = vec_sub(p, obj->pos);
 		double	d2 = vec_sqr_len(v);
 		if (d2 <= radius * radius)
 			return (t);
@@ -22,7 +22,7 @@ static double	hit_disk(t_plane *pl, t_ray *ray, double radius)
 	return (-1.0);
 }
 
-static double	hit_cyl_wall(t_cylinder *cy, t_ray *ray)
+static double	hit_cyl_wall(t_obj *obj, t_ray *ray)
 {
 	double	t;
 	t_vec3d	x;
@@ -32,16 +32,16 @@ static double	hit_cyl_wall(t_cylinder *cy, t_ray *ray)
 	double	disc;
 	double	m;
 
-	x = vec_sub(ray->origin, cy->pos);
-	a = vec_sqr_len(ray->dir) - vec_dot(ray->dir, cy->dir) * vec_dot(ray->dir, cy->dir);
-	half_b = vec_dot(ray->dir, x) - vec_dot(ray->dir, cy->dir) * vec_dot(x, cy->dir);
-	c = vec_sqr_len(x) - vec_dot(x, cy->dir) * vec_dot(x, cy->dir) - cy->diam * cy->diam / 4;
+	x = vec_sub(ray->origin, obj->pos);
+	a = vec_sqr_len(ray->dir) - vec_dot(ray->dir, obj->cy.dir) * vec_dot(ray->dir, obj->cy.dir);
+	half_b = vec_dot(ray->dir, x) - vec_dot(ray->dir, obj->cy.dir) * vec_dot(x, obj->cy.dir);
+	c = vec_sqr_len(x) - vec_dot(x, obj->cy.dir) * vec_dot(x, obj->cy.dir) - obj->cy.diam * obj->cy.diam / 4;
 	disc = half_b * half_b -  a * c;
 	if (disc < 0.)
 		return (-1.0);
 	t = (-half_b - sqrt(disc)) / a;
-	m = vec_dot(ray->dir, vec_scale(cy->dir, t)) + vec_dot(x, cy->dir);
-	if (fabs(m) > cy->height / 2)
+	m = vec_dot(ray->dir, vec_scale(obj->cy.dir, t)) + vec_dot(x, obj->cy.dir);
+	if (fabs(m) > obj->cy.height / 2)
 		return (-1.0);
 	return (t);
 }
@@ -69,48 +69,48 @@ static int	find_smallest_pos_t(double *t)
 	return (smallest_pos);
 }
 
-static void	get_surf_norm_cyl(t_cylinder *cy, t_ray *ray, double t, t_vec3d *norm)
+static void	get_surf_norm_cyl(t_obj *obj, t_ray *ray, double t, t_vec3d *norm)
 {
 	t_vec3d	x;
 	double	m;
 	t_vec3d	p;
 
-	x = vec_sub(ray->origin, cy->pos);
-	m = vec_dot(ray->dir, vec_scale(cy->dir, t)) + vec_dot(x, cy->dir);
+	x = vec_sub(ray->origin, obj->pos);
+	m = vec_dot(ray->dir, vec_scale(obj->cy.dir, t)) + vec_dot(x, obj->cy.dir);
 	p = ray_at(ray, t);
-	*norm = vec_norm(vec_sub(vec_sub(p, cy->pos), vec_scale(cy->dir, m)));
+	*norm = vec_norm(vec_sub(vec_sub(p, obj->pos), vec_scale(obj->cy.dir, m)));
 }
 
-double	hit_cylinder(t_cylinder *cy, t_ray *ray, t_vec3d *norm)
+double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *norm)
 {
-	t_plane	d[2];
+	t_obj	d[2];
 	double	t[3];
 	int		i;
 
-	t[0] = hit_disk(&(t_plane){.type = PLANE, .dir = cy->dir,
-		.pos = vec_add(cy->pos, vec_scale(cy->dir, cy->height / 2))},
-		ray, cy->diam / 2);
-	t[1] = hit_disk(&(t_plane){.type = PLANE, .dir = cy->dir,
-		.pos = vec_add(cy->pos, vec_scale(cy->dir, -(cy->height / 2)))},
-		ray, cy->diam / 2);
-	t[2] = hit_cyl_wall(cy, ray);
+	t[0] = hit_disk(&(t_obj){.type = PLANE, .pl.dir = obj->cy.dir,
+		.pos = vec_add(obj->pos, vec_scale(obj->cy.dir, obj->cy.height / 2))},
+		ray, obj->cy.diam / 2);
+	t[1] = hit_disk(&(t_obj){.type = PLANE, .pl.dir = obj->cy.dir,
+		.pos = vec_add(obj->pos, vec_scale(obj->cy.dir, -(obj->cy.height / 2)))},
+		ray, obj->cy.diam / 2);
+	t[2] = hit_cyl_wall(obj, ray);
 	i = find_smallest_pos_t(t);
 	if (i == -1)
 		return (-1.0);
 	else if (i == 0)
 	{
 		if (norm)
-			*norm = cy->dir;
+			*norm = obj->cy.dir;
 	}
 	else if (i == 1)
 	{
 		if (norm)
-			*norm = vec_scale(cy->dir, -1.);
+			*norm = vec_scale(obj->cy.dir, -1.);
 	}
 	else if (i == 2)
 	{
 		if (norm)
-			get_surf_norm_cyl(cy, ray, t[2], norm);
+			get_surf_norm_cyl(obj, ray, t[2], norm);
 	}
 	return (t[i]);
 }

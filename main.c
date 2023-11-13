@@ -46,9 +46,9 @@ t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
 	hg = sc->amb.color.g * sc->amb.ratio / 255;
 	hb = sc->amb.color.b * sc->amb.ratio / 255;
 	return ((t_color){
-		.r = hit->obj->u.color.r * hr,
-		.g = hit->obj->u.color.g * hg,
-		.b = hit->obj->u.color.b * hb
+		.r = hit->obj->color.r * hr,
+		.g = hit->obj->color.g * hg,
+		.b = hit->obj->color.b * hb
 	});
 }
 
