@@ -60,11 +60,11 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 
 	if (hit_objects(scene, ray, &hitrec))
 	{
-		return (get_ambient_color(scene, &hitrec));
-		// norm = hitrec.normal;
-		// new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
-		// new = color_add(new, color_new(255, 255, 255));
-		// return (color_scale(new, 0.5));
+		// return (get_ambient_color(scene, &hitrec));
+		norm = hitrec.normal;
+		new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
+		new = color_add(new, color_new(255, 255, 255));
+		return (color_scale(new, 0.5));
 	}
 	t_vec3d unit_direction = vec_norm(ray->dir);
 	double a = 0.5 * (unit_direction.y + 1.0);
@@ -118,20 +118,20 @@ void	*do_render(void *arg)
 	return (NULL);
 }
 
-static void	move_cam(t_scene *sc, t_vec3d mov)
-{
-	sc->cam.pov = vec_add(sc->cam.pov, mov);
-}
+// static void	move_cam(t_scene *sc, t_vec3d mov)
+// {
+// 	sc->cam.pov = vec_add(sc->cam.pov, mov);
+// }
 
-// static void	turn_cam(t_scene *sc, int horizontal, int vertical)
+// static void	turn_cam(t_scene *sc, double horizontal, double vertical)
 // {
 // 	t_vec3d	new;
 
 // 	if (horizontal)
-// 		new.y = 0;
+// 		new = (t_vec3d){.x = horizontal};
 // 	else if(vertical)
-// 		new.x = 0;
-	
+// 		new = (t_vec3d){.y = vertical};
+// 	sc->cam.dir = vec_norm(vec_add(sc->cam.dir, new));
 // }
 
 void	ft_turn_hook(void *in)
