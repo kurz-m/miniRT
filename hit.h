@@ -6,7 +6,7 @@ typedef struct s_hitrec
 	t_point3d	p;
 	t_vec3d		normal;
 	double		t;
-	t_obj		*obj;
+	t_objs		*obj;
 }	t_hitrec;
 
 /// @brief Main entry point for calculating intersections between

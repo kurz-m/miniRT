@@ -5,38 +5,38 @@
 #include "miniRT.h"
 #include <stdbool.h>
 
-bool	parse_ambient(t_scene *scene, char **args)
+bool	parse_ambient(t_parse *p, char **args)
 {
-	if (scene->amb.set)
+	if (p->amb.set)
 		return (ft_error(MULT_AMB, NULL, NULL));
 	if (ft_arrlen(args) != 3)
 		return (ft_error3(args, BAD_AMB));
-	if (!parse_color(&scene->amb.color, args[2]))
+	if (!parse_color(&p->amb.color, args[2]))
 		return (ft_error("ambient", args[2], BAD_COL));
-	if (!parse_double(&scene->amb.ratio, args[1], 0, 1))
+	if (!parse_double(&p->amb.ratio, args[1], 0, 1))
 		return (ft_error(args[1], "bad ambient ratio!", NULL));
-	scene->amb.set = true;
+	p->amb.set = true;
 	return (true);
 }
 
-bool	parse_cam(t_scene *scene, char **args)
+bool	parse_cam(t_parse *p, char **args)
 {
-	if (scene->cam.set)
+	if (p->cam.set)
 		return (ft_error(MULT_CAM, NULL, NULL));
 	if (ft_arrlen(args) != 4)
 		return (ft_error3(args, BAD_CAM));
-	if (!parse_vec(&scene->cam.pov, args[1]))
+	if (!parse_vec(&p->cam.pov, args[1]))
 		return (ft_error("cam position", args[1], BAD_VEC));
-	if (!parse_norm_vec(&scene->cam.dir, args[2]))
+	if (!parse_norm_vec(&p->cam.dir, args[2]))
 		return (ft_error("cam direction", args[2], BAD_VEC));
-	if (!parse_int((int *)&scene->cam.fov, args[3], 1, 179))
+	if (!parse_int((int *)&p->cam.fov, args[3], 1, 179))
 		return (ft_error(args[3], BAD_FOV, NULL));
-	scene->cam.foc = get_focal_length(scene->cam.fov);
-	scene->cam.set = true;
+	p->cam.foc = get_focal_length(p->cam.fov);
+	p->cam.set = true;
 	return (true);
 }
 
-bool	parse_lights(t_scene *scene, char **args)
+bool	parse_lights(t_parse *p, char **args)
 {
 	t_light	l;
 	t_light	*nl;
@@ -57,6 +57,6 @@ bool	parse_lights(t_scene *scene, char **args)
 		return (ft_error(MALLOC_ERR, NULL, NULL));
 	*nl = (t_light){.type = l.type, .brightness = l.brightness,
 		.color = l.color, .pos = l.pos};
-	ft_lstadd_back(&(scene->lights), ft_lstnew(nl));
+	ft_lstadd_back(&(p->lights), ft_lstnew(nl));
 	return (true);
 }
