@@ -38,24 +38,24 @@ bool	parse_cam(t_parse *p, char **args)
 
 bool	parse_lights(t_parse *p, char **args)
 {
-	t_light	l;
-	t_light	*nl;
+	t_obj	l;
+	t_obj	*nl;
 
 	if (ft_arrlen(args) > 4 || ft_arrlen(args) < 3)
 		return (ft_error3(args, BAD_LAMP));
-	l = (t_light){};
+	l = (t_obj){};
 	l.type = LIGHT;
 	l.color = (t_color){.r = 255, .g = 255, .b = 255};
 	if (!parse_vec(&l.pos, args[1]))
 		return (ft_error("light position", args[1], BAD_VEC));
-	if (!parse_double(&l.brightness, args[2], 0, 1))
+	if (!parse_double(&l.light.brightness, args[2], 0, 1))
 		return (ft_error("light brightness", args[2], BAD_DOUBLE));
 	if (ft_arrlen(args) == 4 && !parse_color(&l.color, args[3]))
 		return (ft_error("light color", args[3], BAD_COL));
 	nl = malloc(sizeof(t_light));
 	if (!nl)
 		return (ft_error(MALLOC_ERR, NULL, NULL));
-	*nl = (t_light){.type = l.type, .brightness = l.brightness,
+	*nl = (t_obj){.type = l.type, .light.brightness = l.light.brightness,
 		.color = l.color, .pos = l.pos};
 	ft_lstadd_back(&(p->lights), ft_lstnew(nl));
 	return (true);
