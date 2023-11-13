@@ -151,9 +151,13 @@ void	ft_turn_hook(void *in)
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_S))
 	// 	move_cam(param->render.scene, vec_new(0,-2,0)), changed = true;
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_UP))
+	// 	turn_cam(param->render.scene, 0, 0.2), init_cam(&(param->render.scene->cam)), changed = true;
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_DOWN))
+	// 	turn_cam(param->render.scene, 0, -0.2), init_cam(&(param->render.scene->cam)), changed = true;
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_LEFT))
+	// 	turn_cam(param->render.scene, -0.2, 0), init_cam(&(param->render.scene->cam)), changed = true;
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_RIGHT))
+	// 	turn_cam(param->render.scene, 0.2, 0), init_cam(&(param->render.scene->cam)), changed = true;
 	// if (changed)
 	// {
 	// 	if (param->thread)
