@@ -8,31 +8,28 @@
 
 bool	hit_objects(t_scene *scene, t_ray *ray, t_hitrec *hitrec)
 {
-	t_list	*obj;
-	t_obj	*curr_obj;
+	int		i;
 	double	t;
 	t_vec3d	norm;
 
 	norm = vec_new(0, 0, 0);
 	hitrec->t = INFINITY;
-	obj = scene->objects;
-	while (obj)
+	while (i < scene->n_obj)
 	{
-		curr_obj = obj->content;
-		if (curr_obj->type == SPHERE)
-			t = hit_sphere((t_sphere *)curr_obj, ray, &norm);
-		else if (curr_obj->type == CYLINDER)
-			t = hit_cylinder((t_cylinder *)curr_obj, ray, &norm);
-		else if (curr_obj->type == PLANE)
-			t = hit_plane((t_plane *)curr_obj, ray, &norm);
+		if (scene->objs[i].u.type == SPHERE)
+			t = hit_sphere(&(scene->objs[i].sp), ray, &norm);
+		else if (scene->objs[i].u.type == CYLINDER)
+			t = hit_cylinder(&(scene->objs[i].cy), ray, &norm);
+		else if (scene->objs[i].u.type == PLANE)
+			t = hit_plane(&(scene->objs[i].pl), ray, &norm);
 		if (0.0 < t && t < hitrec->t)
 		{
 			hitrec->t = t;
-			hitrec->obj = curr_obj;
+			hitrec->obj = &(scene->objs[i]);
 			hitrec->p = ray_at(ray, t);
 			hitrec->normal = norm;
 		}
-		obj = obj->next;
+		++i;
 	}
 	if (hitrec->t == INFINITY)
 		return (false);

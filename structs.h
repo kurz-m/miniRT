@@ -37,6 +37,13 @@ typedef struct	s_obj
 	t_color		color;
 }	t_obj;
 
+typedef struct	s_utils
+{
+	t_type		type;
+	t_color		color;
+}	t_utils;
+
+
 typedef struct	s_light
 {
 	t_type		type;
@@ -72,12 +79,30 @@ typedef struct	s_cylinder
 	double		height;
 }	t_cylinder;
 
-typedef struct	s_scene
+typedef union	u_obj
+{
+	t_utils		u;
+	t_sphere	sp;
+	t_plane		pl;
+	t_cylinder	cy;
+}	t_objs;
+
+typedef struct	s_parse
 {
 	t_amb	amb;
 	t_cam	cam;
 	t_list	*lights;
 	t_list	*objects;
+}	t_parse;
+
+typedef struct	s_scene
+{
+	t_amb	amb;
+	t_cam	cam;
+	t_light	*lights;
+	int		n_light;
+	t_objs	*objs;
+	int		n_obj;
 }	t_scene;
 
 #endif
