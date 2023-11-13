@@ -22,7 +22,6 @@ static double	hit_disk(t_plane *pl, t_ray *ray, double radius)
 	return (-1.0);
 }
 
-// see https://hugi.scene.org/online/hugi24/coding%20graphics%20chris%20dragan%20raytracing%20shapes.htm for reference
 static double	hit_cyl_wall(t_cylinder *cy, t_ray *ray)
 {
 	double	t;
