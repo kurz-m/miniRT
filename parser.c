@@ -161,12 +161,6 @@ void	copy_sphere(t_scene *scene, t_sphere *sp, int i)
 
 void	copy_cylinder(t_scene *scene, t_cylinder *cy, int i)
 {
-	// scene->objs[i].cy.type = cy->type;
-	// scene->objs[i].cy.color = cy->color;
-	// scene->objs[i].cy.pos = cy->pos;
-	// scene->objs[i].cy.dir = cy->dir;
-	// scene->objs[i].cy.diam = cy->diam;
-	// scene->objs[i].cy.height = cy->height;
 	scene->objs[i].cy = (t_cylinder){
 		.type = cy->type,
 		.color = cy->color,
