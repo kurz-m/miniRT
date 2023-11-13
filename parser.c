@@ -128,7 +128,7 @@ static bool	parse_line(t_parse *p, char *line)
 	return (ret);
 }
 
-bool	copy_lights(t_scene *scene, t_parse *parse)
+void	copy_lights(t_scene *scene, t_parse *parse)
 {
 	t_list	*light;
 	t_light	*content;
@@ -147,7 +147,6 @@ bool	copy_lights(t_scene *scene, t_parse *parse)
 		};
 		light = light->next;
 	}
-	return (true);
 }
 
 void	copy_sphere(t_scene *scene, t_sphere *sp, int i)
@@ -162,6 +161,12 @@ void	copy_sphere(t_scene *scene, t_sphere *sp, int i)
 
 void	copy_cylinder(t_scene *scene, t_cylinder *cy, int i)
 {
+	// scene->objs[i].cy.type = cy->type;
+	// scene->objs[i].cy.color = cy->color;
+	// scene->objs[i].cy.pos = cy->pos;
+	// scene->objs[i].cy.dir = cy->dir;
+	// scene->objs[i].cy.diam = cy->diam;
+	// scene->objs[i].cy.height = cy->height;
 	scene->objs[i].cy = (t_cylinder){
 		.type = cy->type,
 		.color = cy->color,
@@ -182,7 +187,7 @@ void	copy_plane(t_scene *scene, t_plane *pl, int i)
 	};
 }
 
-bool	copy_objs(t_scene *scene, t_parse *parse)
+void	copy_objs(t_scene *scene, t_parse *parse)
 {
 	t_list	*obj;
 	t_obj	*curr_obj;
@@ -202,7 +207,6 @@ bool	copy_objs(t_scene *scene, t_parse *parse)
 		obj = obj->next;
 		++i;
 	}
-	return (true);
 }
 
 bool	init_obj(t_scene *scene, t_parse *parse)
@@ -216,13 +220,17 @@ bool	init_obj(t_scene *scene, t_parse *parse)
 	};
 	light_size = ft_lstsize(parse->lights);
 	obj_size = ft_lstsize(parse->objects);
-	scene->lights = ft_calloc(light_size, sizeof(t_light));
+	// TODO: check if this is a bug that creates a segf when not adding +1
+	scene->lights = ft_calloc(light_size + 1, sizeof(t_light));
 	scene->n_light = light_size;
-	scene->objs = ft_calloc(light_size, sizeof(t_objs));
+	// TODO: check if this is a bug that creates a segf when not adding +1
+	scene->objs = ft_calloc(light_size + 1, sizeof(t_objs));
 	scene->n_obj = obj_size;
 	// TODO: catch malloc fail (free stuff on error)
 	if (scene->lights == NULL || scene->objs == NULL)
 		return (false);
+	copy_objs(scene, parse);
+	copy_lights(scene, parse);
 	return (true);
 }
 

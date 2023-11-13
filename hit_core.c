@@ -14,6 +14,7 @@ bool	hit_objects(t_scene *scene, t_ray *ray, t_hitrec *hitrec)
 
 	norm = vec_new(0, 0, 0);
 	hitrec->t = INFINITY;
+	i = 0;
 	while (i < scene->n_obj)
 	{
 		if (scene->objs[i].u.type == SPHERE)
