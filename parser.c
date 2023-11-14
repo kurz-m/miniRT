@@ -222,6 +222,8 @@ bool	init_obj(t_scene *scene, t_parse *parse)
 		return (false);
 	copy_objs(scene, parse);
 	copy_lights(scene, parse);
+	ft_lstclear(&(parse->lights), &free);
+	ft_lstclear(&(parse->objects), &free);
 	return (true);
 }
 
