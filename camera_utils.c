@@ -12,7 +12,10 @@
 
 int	get_focal_length(uint8_t fov)
 {
-	return (round((double)WIDTH / 2.0) / tan((double)fov / 2.0));
+	double	fov_rad;
+
+	fov_rad = (double)fov * M_PI / 180.0;
+	return (round((double)WIDTH / 2.0) / tan(fov_rad / 2.0));
 }
 
 t_vec3d	get_pixel_center(t_cam *cam, int i, int j)
