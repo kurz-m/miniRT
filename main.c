@@ -9,6 +9,7 @@
 #include "hit.h"
 #include <pthread.h>
 #include <time.h>
+#include <math.h>
 
 // -----------------------------------------------------------------------------
 // Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
@@ -42,6 +43,8 @@ t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
 	double	hg;
 	double	hb;
 
+	printf("TEEEEEST\n");
+	fflush(stdout);
 	hr = sc->amb.color.r * sc->amb.ratio / 255;
 	hg = sc->amb.color.g * sc->amb.ratio / 255;
 	hb = sc->amb.color.b * sc->amb.ratio / 255;
@@ -52,19 +55,64 @@ t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
 	});
 }
 
+t_color	get_diffuse_light(
+	t_color *obj_color, double angle, t_obj *obj)
+{
+	t_color		diffuse_color;
+	double		r;
+	double		g;
+	double		b;
+
+	r = (double)obj_color->r * (angle * obj->light.brightness * ((double)obj->color.r / 255.0));
+	g = (double)obj_color->g * (angle * obj->light.brightness * ((double)obj->color.g / 255.0));
+	b = (double)obj_color->b * (angle * obj->light.brightness * ((double)obj->color.b / 255.0));
+	diffuse_color = (t_color){
+		.r = (int)r,
+		.g = (int)g,
+		.b = (int)b,
+	};
+	//diffuse_color = (t_color){
+	//	.r = obj_color->r * (angle * obj->light.brightness * (obj->color.r / 255)),
+	//	.g = obj_color->g * (angle * obj->light.brightness * (obj->color.g / 255)),
+	//	.b = obj_color->b * (angle * obj->light.brightness * (obj->color.b / 255)),
+	//};
+
+	return (diffuse_color);
+}
+
+void	color_clamp(t_color *color)
+{
+	if (color->r > 255)
+		color->r = 255;
+	if (color->g > 255)
+		color->g = 255;
+	if (color->b > 255)
+		color->b = 255;
+}
+
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
 	t_color		new;
 	t_hitrec	hitrec;
+	t_hitrec	hit_light;
 	t_vec3d		norm;
+	t_color		color;
+	t_ray		light_ray;
+	double		angle;
 
+	color = color_new(0, 0, 0);
 	if (hit_objects(scene, ray, &hitrec))
 	{
-		// return (get_ambient_color(scene, &hitrec));
+		color = color_add(color, get_ambient_color(scene, &hitrec));
+		light_ray = ray_new(hitrec.p, vec_sub(scene->lights->pos, hitrec.p));
 		norm = hitrec.normal;
-		new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
-		new = color_add(new, color_new(255, 255, 255));
-		return (color_scale(new, 0.5));
+		if (hit_objects(scene, &light_ray, &hit_light) == false)
+		{
+			angle = fmax(vec_dot(norm, light_ray.dir), 0.0f);
+			color = color_add(color, get_diffuse_light(&(hitrec.obj->color), angle, scene->lights));
+			color_clamp(&color);
+		}
+		return (color);
 	}
 	t_vec3d unit_direction = vec_norm(ray->dir);
 	double a = 0.5 * (unit_direction.y + 1.0);
@@ -106,12 +154,12 @@ void	*do_render(void *arg)
 			ray_dir = vec_sub(pixel_center, scene->cam.pov);
 			ray = ray_new(scene->cam.pov, ray_dir);
 			color = get_ray_color(scene, &ray);
-			for (int samples = 0; samples < AA_SAMPLES - 1; samples++) {
-				pixel_center = get_pixel_random(&scene->cam, i, j);
-				ray_dir = vec_sub(pixel_center, scene->cam.pov);
-				ray = ray_new(scene->cam.pov, ray_dir);
-				color = color_scale(color_add(get_ray_color(scene, &ray), color), 0.5);
-			}
+			// for (int samples = 0; samples < AA_SAMPLES - 1; samples++) {
+			// 	pixel_center = get_pixel_random(&scene->cam, i, j);
+			// 	ray_dir = vec_sub(pixel_center, scene->cam.pov);
+			// 	ray = ray_new(scene->cam.pov, ray_dir);
+			// 	color = color_scale(color_add(get_ray_color(scene, &ray), color), 0.5);
+			// }
 			mlx_put_pixel(image, i, j, get_rgba_from_tcol(color));
 		}
 	}

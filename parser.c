@@ -214,13 +214,10 @@ bool	init_obj(t_scene *scene, t_parse *parse)
 	};
 	light_size = ft_lstsize(parse->lights);
 	obj_size = ft_lstsize(parse->objects);
-	// TODO: check if this is a bug that creates a segf when not adding +1
 	scene->lights = ft_calloc(light_size + 1, sizeof(t_obj));
 	scene->n_light = light_size;
-	// TODO: check if this is a bug that creates a segf when not adding +1
 	scene->objs = ft_calloc(light_size + 1, sizeof(t_obj));
 	scene->n_obj = obj_size;
-	// TODO: catch malloc fail (free stuff on error)
 	if (scene->lights == NULL || scene->objs == NULL)
 		return (false);
 	copy_objs(scene, parse);
@@ -248,6 +245,12 @@ bool	parse(t_scene *scene, char *filepath)
 		tmp_line = get_next_line(fd);
 	}
 	if (init_obj(scene, &parse) == false)
+	{
+		free(scene->lights);
+		free(scene->objs);
+		ft_lstclear(&parse.lights, &free);
+		ft_lstclear(&parse.objects, &free);
 		return (false);
+	}
 	return (true);
 }
