@@ -216,7 +216,7 @@ bool	init_obj(t_scene *scene, t_parse *parse)
 	obj_size = ft_lstsize(parse->objects);
 	scene->lights = ft_calloc(light_size + 1, sizeof(t_obj));
 	scene->n_light = light_size;
-	scene->objs = ft_calloc(light_size + 1, sizeof(t_obj));
+	scene->objs = ft_calloc(obj_size + 1, sizeof(t_obj));
 	scene->n_obj = obj_size;
 	if (scene->lights == NULL || scene->objs == NULL)
 		return (false);
