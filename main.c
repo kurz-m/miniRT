@@ -43,8 +43,6 @@ t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
 	double	hg;
 	double	hb;
 
-	printf("TEEEEEST\n");
-	fflush(stdout);
 	hr = sc->amb.color.r * sc->amb.ratio / 255;
 	hg = sc->amb.color.g * sc->amb.ratio / 255;
 	hb = sc->amb.color.b * sc->amb.ratio / 255;
@@ -106,7 +104,8 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 		color = color_add(color, get_ambient_color(scene, &hitrec));
 		light_ray = ray_new(hitrec.p, vec_sub(scene->lights->pos, hitrec.p));
 		norm = hitrec.normal;
-		if (hit_objects(scene, &light_ray, &hit_light) == false)
+		hit_objects(scene, &light_ray, &hit_light);
+		if (hitrec.t > vec_len(vec_sub(scene->lights->pos, hitrec.p)))
 		{
 			angle = fmax(vec_dot(norm, light_ray.dir), 0.0f);
 			color = color_add(color, get_diffuse_light(&(hitrec.obj->color), angle, scene->lights));
@@ -228,7 +227,6 @@ int32_t main(int32_t argc, const char* argv[])
 	scene = (t_scene){};
 	parse(&scene, "test.rt");
 	init_cam(&scene.cam);
-	srand(time(NULL));
 
 	// Gotta error check this stuff
 	if (!(mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
