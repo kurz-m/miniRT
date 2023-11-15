@@ -9,6 +9,8 @@
 /// @param cam Struct holding the camera settings
 void	init_cam(t_cam *cam);
 
+bool	init_mlx(mlx_t *mlx, mlx_image_t* image);
+
 // init_viewport input &t_cam
 // init_pixel_ul
 #endif

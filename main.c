@@ -104,13 +104,15 @@ typedef struct s_render
 {
 	t_scene		*scene;
 	mlx_image_t	*image;
+	int			i;
 }	t_render;
 
 typedef struct s_param
 {
 	mlx_t		*mlx;
-	pthread_t	thread;
-	t_render	render;
+	pthread_t	thread[THREAD_NO];
+	t_scene		*scene;
+	mlx_image_t	*image;
 }	t_param;
 
 void	*do_render(void *arg)
@@ -122,6 +124,7 @@ void	*do_render(void *arg)
 	t_vec3d		ray_dir;
 	t_ray		ray;
 	t_color		color;
+	int			th_off;
 	// int			fd;
 
 	// fd = open("img.ppm", O_WRONLY | O_CREAT);
@@ -130,9 +133,10 @@ void	*do_render(void *arg)
 	image = render->image;
 	// ft_fprintf(fd, "P3\n");
 	// ft_fprintf(fd, "%d %d\n255\n", WIDTH, HEIGHT);
-	for (int j = 0; j < (int)image->height; ++j) {
+	th_off = ((int)image->height / THREAD_NO) * render->i;
+	for (int j = 0; j < (int)image->height / THREAD_NO; ++j) {
 		for (int i = 0; i < (int)image->width; ++i) {
-			pixel_center = get_pixel_center(&scene->cam, i, j);
+			pixel_center = get_pixel_center(&scene->cam, i, j + th_off);
 			ray_dir = vec_sub(pixel_center, scene->cam.pov);
 			ray = ray_new(scene->cam.pov, ray_dir);
 			color = get_ray_color(scene, &ray);
@@ -143,7 +147,7 @@ void	*do_render(void *arg)
 			// 	color = color_scale(color_add(get_ray_color(scene, &ray), color), 0.5);
 			// }
 			// ft_fprintf(fd, "%i %i %i\n", color.r, color.g, color.b);
-			mlx_put_pixel(image, i, j, get_rgba_from_tcol(color));
+			mlx_put_pixel(image, i, j + th_off, get_rgba_from_tcol(color));
 		}
 	}
 	// close(fd);
@@ -209,41 +213,30 @@ int32_t main(int32_t argc, const char* argv[])
 	t_scene			scene;
 	t_param			param;
 	mlx_image_t*	image;
+	t_render		r[THREAD_NO];
+	int				i;
 
-	(void)argc;
-	(void)argv;
+	if (argc != 1)
+		return (EXIT_FAILURE);
 	scene = (t_scene){};
-	parse(&scene, "test.rt");
+	i = 0;
+	parse(&scene, argv[1]);
 	init_cam(&scene.cam);
-
-	// Gotta error check this stuff
-	if (!(mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
+	if (init_mlx(mlx, image))
+		return (EXIT_FAILURE);
+	param = (t_param){.mlx = mlx, .image = image, .scene = &scene};
+	while (i < THREAD_NO)
 	{
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
+		r[i] = (t_render){
+			.i = i,
+			.image = image,
+			.scene = &scene,
+		};
+		if (pthread_create(&param.thread[i], NULL, &do_render, r + i))
+			return (EXIT_FAILURE);
+		++i;
 	}
-	if (!(image = mlx_new_image(mlx, WIDTH, HEIGHT)))
-	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
-	}
-	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
-	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
-	}
-
-	param = (t_param)
-	{
-		.mlx = mlx,
-		.render = (t_render){.image = image, .scene = &scene},
-	};
-	pthread_create(&param.thread, NULL, &do_render, &(param.render));
-	// mlx_loop_hook(mlx, ft_hook, mlx);
 	mlx_loop_hook(mlx, ft_turn_hook, &param);
-
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return (EXIT_SUCCESS);
