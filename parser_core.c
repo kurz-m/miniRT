@@ -73,6 +73,7 @@ bool	parse(t_scene *scene, char *filepath)
 	char	*line;
 
 	parse = (t_parse){};
+	*scene = (t_scene){};
 	fd = open(filepath, O_RDONLY);
 	tmp_line = get_next_line(fd);
 	while (tmp_line)

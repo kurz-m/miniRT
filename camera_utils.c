@@ -39,3 +39,20 @@ t_vec3d	get_pixel_center(t_cam *cam, int i, int j)
 // 	ret = vec_add(cam->pixel_ul, ret);
 // 	return (ret);
 // }
+
+
+// static void	move_cam(t_scene *sc, t_vec3d mov)
+// {
+// 	sc->cam.pov = vec_add(sc->cam.pov, mov);
+// }
+
+// static void	turn_cam(t_scene *sc, double horizontal, double vertical)
+// {
+// 	t_vec3d	new;
+
+// 	if (horizontal)
+// 		new = (t_vec3d){.x = horizontal};
+// 	else if(vertical)
+// 		new = (t_vec3d){.y = vertical};
+// 	sc->cam.dir = vec_norm(vec_add(sc->cam.dir, new));
+// }

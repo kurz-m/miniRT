@@ -3,14 +3,6 @@
 
 # include <stdbool.h>
 
-typedef struct s_vec3d
-{
-	double	x;
-	double	y;
-	double	z;
-}	t_vec3d;
-
-typedef t_vec3d	t_point3d;
 
 /// @brief Creates a new vector with the given values
 /// @param x X value of the vector

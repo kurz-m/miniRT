@@ -7,6 +7,7 @@
 # include <math.h>
 # include <fcntl.h>
 # include <limits.h>
+# include "structs.h"
 
 # define WIDTH 1280
 # define HEIGHT 720
