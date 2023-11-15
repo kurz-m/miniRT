@@ -97,19 +97,25 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 	t_color		color;
 	t_ray		light_ray;
 	double		angle;
+	int			i;
 
 	color = color_new(0, 0, 0);
 	if (hit_objects(scene, ray, &hitrec))
 	{
 		color = color_add(color, get_ambient_color(scene, &hitrec));
-		light_ray = ray_new(hitrec.p, vec_sub(scene->lights->pos, hitrec.p));
-		norm = hitrec.normal;
-		hit_objects(scene, &light_ray, &hit_light);
-		if (hit_light.t >= 0 && hit_light.t >= vec_len(vec_sub(scene->lights->pos, hitrec.p)))
+		i = 0;
+		while (i < scene->n_light)
 		{
-			angle = fmax(vec_dot(norm, light_ray.dir), 0.0f);
-			color = color_add(color, get_diffuse_light(&(hitrec.obj->color), angle, scene->lights));
-			color_clamp(&color);
+			light_ray = ray_new(hitrec.p, vec_sub(scene->lights[i].pos, hitrec.p));
+			norm = hitrec.normal;
+			hit_objects(scene, &light_ray, &hit_light);
+			if (hit_light.t >= 0 && hit_light.t >= vec_len(vec_sub(scene->lights[i].pos, hitrec.p)))
+			{
+				angle = fmax(vec_dot(norm, light_ray.dir), 0.0f);
+				color = color_add(color, get_diffuse_light(&(hitrec.obj->color), angle, scene->lights + i));
+				color_clamp(&color);
+			}
+			i++;
 		}
 		return (color);
 	}
