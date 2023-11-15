@@ -27,7 +27,7 @@ t_color	color_scale(t_color col, double scale)
 	return (new);
 }
 
-t_color		color_add(t_color col1, t_color col2)
+t_color	color_add(t_color col1, t_color col2)
 {
 	t_color	new;
 

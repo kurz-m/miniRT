@@ -2,6 +2,7 @@
 #include "structs.h"
 #include "parse.h"
 #include "error.h"
+#include "hit.h"
 #include "miniRT.h"
 
 void	copy_lights(t_scene *scene, t_parse *parse)
@@ -31,6 +32,7 @@ void	copy_sphere(t_scene *scene, t_obj *obj, int i)
 		.type = obj->type,
 		.color = obj->color,
 		.pos = obj->pos,
+		.hit = &hit_sphere,
 		.sp.diameter = obj->sp.diameter,
 	};
 }
@@ -41,6 +43,7 @@ void	copy_cylinder(t_scene *scene, t_obj *obj, int i)
 		.type = obj->type,
 		.color = obj->color,
 		.pos = obj->pos,
+		.hit = &hit_cylinder,
 		.cy.dir = obj->cy.dir,
 		.cy.diam = obj->cy.diam,
 		.cy.height = obj->cy.height,
@@ -53,6 +56,7 @@ void	copy_plane(t_scene *scene, t_obj *obj, int i)
 		.type = obj->type,
 		.color = obj->color,
 		.pos = obj->pos,
+		.hit = &hit_plane,
 		.pl.dir = obj->pl.dir,
 	};
 }

@@ -54,11 +54,19 @@ typedef struct	s_cylinder
 	double		height;
 }	t_cylinder;
 
-typedef struct	s_obj
+typedef struct s_obj	t_obj;
+
+typedef struct	s_ray {
+	t_point3d	origin;
+	t_vec3d		dir;
+}	t_ray;
+
+struct	s_obj
 {
 	t_type		type;
 	t_color		color;
 	t_point3d	pos;
+	double		(*hit)(t_obj *obj, t_ray *ray, t_vec3d *norm);
 	union
 	{
 		t_light		light;
@@ -66,7 +74,7 @@ typedef struct	s_obj
 		t_plane		pl;
 		t_cylinder	cy;
 	};
-}	t_obj;
+};
 
 typedef struct	s_parse
 {

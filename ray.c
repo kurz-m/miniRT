@@ -1,7 +1,9 @@
+#include "libft.h"
+#include "structs.h"
 #include "vec3d.h"
 #include "ray.h"
 
-t_ray		ray_new(t_point3d origin, t_vec3d dir)
+t_ray	ray_new(t_point3d origin, t_vec3d dir)
 {
 	t_ray	ray;
 
