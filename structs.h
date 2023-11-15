@@ -1,37 +1,32 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-# include "miniRT.h"
-# include "pthread.h"
-# include "MLX42.h"
+# include "typedefs.h"
+# include <pthread.h>
 # include "colors.h"
-# include "vec3d.h"
 
-typedef struct s_vec3d
+struct	s_color
+{
+	double	r;
+	double	g;
+	double	b;
+};
+
+struct s_vec3d
 {
 	double	x;
 	double	y;
 	double	z;
-}	t_vec3d;
+};
 
-typedef t_vec3d	t_point3d;
-
-typedef enum e_type
-{
-	LIGHT = 1 << 0,
-	SPHERE = 1 << 1,
-	PLANE = 1 << 2,
-	CYLINDER = 1 << 3,
-}	t_type;
-
-typedef struct s_amb
+struct s_amb
 {
 	double		ratio;
 	t_color		color;
 	bool		set;
-}	t_amb;
+};
 
-typedef struct	s_cam
+struct	s_cam
 {
 	t_point3d	pov;
 	t_vec3d		dir;
@@ -41,36 +36,90 @@ typedef struct	s_cam
 	t_vec3d		delta_u;
 	t_vec3d		delta_v;
 	t_vec3d		pixel_ul;
-}	t_cam;
+};
+struct s_hitrec
+{
+	t_point3d	p;
+	t_vec3d		normal;
+	double		t;
+	t_obj		*obj;
+};
 
-typedef struct	s_light
+struct	s_parse
+{
+	t_amb	amb;
+	t_cam	cam;
+	t_list	*lights;
+	t_list	*objects;
+};
+
+struct	s_ray {
+	t_point3d	origin;
+	t_vec3d		dir;
+};
+
+struct	s_lumi
+{
+	t_ray		light_ray;
+	t_hitrec	hit_light;
+	t_vec3d		norm;
+	t_color		color;
+};
+
+struct s_render
+{
+	t_scene		*scene;
+	mlx_image_t	*image;
+	int			i;
+};
+
+struct s_param
+{
+	mlx_t		*mlx;
+	pthread_t	thread[THREAD_NO];
+	t_scene		*scene;
+	mlx_image_t	*image;
+};
+
+enum e_type
+{
+	LIGHT,
+	SPHERE,
+	PLANE,
+	CYLINDER,
+};
+
+struct	s_scene
+{
+	t_amb	amb;
+	t_cam	cam;
+	t_obj	*lights;
+	int		n_light;
+	t_obj	*objs;
+	int		n_obj;
+};
+
+struct	s_light
 {
 	double		brightness;
-}	t_light;
+};
 
-typedef struct	s_sphere
+struct	s_sphere
 {
 	double		diameter;
-}	t_sphere;
+};
 
-typedef struct	s_plane
+struct	s_plane
 {
 	t_vec3d		dir;
-}	t_plane;
+};
 
-typedef struct	s_cylinder
+struct	s_cylinder
 {
 	t_vec3d		dir;
 	double		diam;
 	double		height;
-}	t_cylinder;
-
-typedef struct s_obj	t_obj;
-
-typedef struct	s_ray {
-	t_point3d	origin;
-	t_vec3d		dir;
-}	t_ray;
+};
 
 struct	s_obj
 {
@@ -86,54 +135,5 @@ struct	s_obj
 		t_cylinder	cy;
 	};
 };
-
-typedef struct	s_parse
-{
-	t_amb	amb;
-	t_cam	cam;
-	t_list	*lights;
-	t_list	*objects;
-}	t_parse;
-
-typedef struct	s_scene
-{
-	t_amb	amb;
-	t_cam	cam;
-	t_obj	*lights;
-	int		n_light;
-	t_obj	*objs;
-	int		n_obj;
-}	t_scene;
-
-typedef struct s_hitrec
-{
-	t_point3d	p;
-	t_vec3d		normal;
-	double		t;
-	t_obj		*obj;
-}	t_hitrec;
-
-typedef struct	s_lumi
-{
-	t_ray		light_ray;
-	t_hitrec	hit_light;
-	t_vec3d		norm;
-	t_color		color;
-}	t_lumi;
-
-typedef struct s_render
-{
-	t_scene		*scene;
-	mlx_image_t	*image;
-	int			i;
-}	t_render;
-
-typedef struct s_param
-{
-	mlx_t		*mlx;
-	pthread_t	thread[THREAD_NO];
-	t_scene		*scene;
-	mlx_image_t	*image;
-}	t_param;
 
 #endif

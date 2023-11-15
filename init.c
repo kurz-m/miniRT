@@ -1,9 +1,9 @@
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
-#include "miniRT.h"
 #include "vec3d.h"
 #include "init.h"
-#include "MLX42.h"
 
 static t_vec3d	calc_pixel_ul(t_cam *cam, t_vec3d cam_vec)
 {
@@ -21,19 +21,19 @@ bool	init_mlx(mlx_t** mlx, mlx_image_t** image)
 	// Gotta error check this stuff
 	if (!(*mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
 	{
-		puts(mlx_strerror(mlx_errno));
+		ft_fprintf(2, mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
 	if (!(*image = mlx_new_image(*mlx, WIDTH, HEIGHT)))
 	{
 		mlx_close_window(*mlx);
-		puts(mlx_strerror(mlx_errno));
+		ft_fprintf(2, mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
 	if (mlx_image_to_window(*mlx, *image, 0, 0) == -1)
 	{
 		mlx_close_window(*mlx);
-		puts(mlx_strerror(mlx_errno));
+		ft_fprintf(2, mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

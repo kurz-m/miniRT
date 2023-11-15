@@ -1,4 +1,6 @@
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
 #include "vec3d.h"
 #include "ray.h"

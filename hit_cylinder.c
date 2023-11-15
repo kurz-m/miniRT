@@ -1,8 +1,11 @@
-#include "libft.h"
 #include <stdbool.h>
 #include <math.h>
+#include "MLX42.h"
+#include "libft.h"
+#include "defines.h"
 #include "structs.h"
 #include "vec3d.h"
+#include "colors.h"
 #include "ray.h"
 #include "hit.h"
 
@@ -30,23 +33,23 @@ static double	hit_cyl_wall(t_obj *obj, t_ray *ray)
 {
 	double	t;
 	t_vec3d	x;
-	double	abc[3];
+	double	abcm[4];
 	double	disc;
-	double	m;
+	double	wall_dot[2];
 
 	x = vec_sub(ray->origin, obj->pos);
-	abc[0] = vec_sqr_len(ray->dir) - vec_dot(ray->dir, obj->cy.dir)
-		* vec_dot(ray->dir, obj->cy.dir);
-	abc[1] = vec_dot(ray->dir, x) - vec_dot(ray->dir, obj->cy.dir)
-		* vec_dot(x, obj->cy.dir);
-	abc[2] = vec_sqr_len(x) - vec_dot(x, obj->cy.dir) * vec_dot(x, obj->cy.dir)
+	wall_dot[0] = vec_dot(ray->dir, obj->cy.dir);
+	wall_dot[1] = vec_dot(x, obj->cy.dir);
+	abcm[0] = vec_sqr_len(ray->dir) - wall_dot[0] * wall_dot[0];
+	abcm[1] = vec_dot(ray->dir, x) - wall_dot[0] * wall_dot[1];
+	abcm[2] = vec_sqr_len(x) - wall_dot[1] * wall_dot[1]
 		- obj->cy.diam * obj->cy.diam / 4;
-	disc = abc[1] * abc[1] - abc[0] * abc[2];
+	disc = abcm[1] * abcm[1] - abcm[0] * abcm[2];
 	if (disc < 0.)
 		return (-1.0);
-	t = (-abc[1] - sqrt(disc)) / abc[0];
-	m = vec_dot(ray->dir, vec_scale(obj->cy.dir, t)) + vec_dot(x, obj->cy.dir);
-	if (fabs(m) > obj->cy.height / 2)
+	t = (-abcm[1] - sqrt(disc)) / abcm[0];
+	abcm[3] = vec_dot(ray->dir, vec_scale(obj->cy.dir, t)) + vec_dot(x, obj->cy.dir);
+	if (fabs(abcm[3]) > obj->cy.height / 2)
 		return (-1.0);
 	return (t);
 }

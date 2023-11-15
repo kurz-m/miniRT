@@ -1,8 +1,11 @@
+#include <fcntl.h>
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
+#include "vec3d.h"
 #include "parse.h"
-#include "error.h"
-#include "miniRT.h"
+#include "utils.h"
 
 static bool	parse_line(t_parse *p, char *line)
 {

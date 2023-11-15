@@ -1,9 +1,11 @@
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
+#include "vec3d.h"
 #include "parse.h"
-#include "error.h"
+#include "utils.h"
 #include "hit.h"
-#include "miniRT.h"
 
 void	copy_lights(t_scene *scene, t_parse *parse)
 {

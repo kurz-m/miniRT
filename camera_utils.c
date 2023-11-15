@@ -1,8 +1,11 @@
 #include <math.h>
+#include <stdint.h>
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
+#include "camera.h"
 #include "vec3d.h"
-#include "miniRT.h"
 
 // static double random_double()
 // {

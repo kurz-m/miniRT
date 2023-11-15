@@ -1,9 +1,6 @@
 #ifndef VEC3D_H
 # define VEC3D_H
 
-# include <stdbool.h>
-
-
 /// @brief Creates a new vector with the given values
 /// @param x X value of the vector
 /// @param y Y value of the vector

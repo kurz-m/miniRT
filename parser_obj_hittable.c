@@ -1,9 +1,11 @@
+#include <math.h>
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
+#include "vec3d.h"
 #include "parse.h"
-#include "error.h"
-#include "miniRT.h"
-#include <stdbool.h>
+#include "utils.h"
 
 bool	parse_sphere(t_parse *p, char **args)
 {

@@ -1,17 +1,18 @@
-#include <pthread.h>
-#include "MLX42.h"
-#include "libft.h"
-#include "structs.h"
-#include "parse.h"
-#include "miniRT.h"
-#include "vec3d.h"
-#include "init.h"
-#include "colors.h"
-#include "ray.h"
-#include "hit.h"
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
+#include <pthread.h>
+#include "MLX42.h"
+#include "libft.h"
+#include "defines.h"
+#include "structs.h"
+#include "parse.h"
+#include "vec3d.h"
+#include "init.h"
+#include "colors.h"
+#include "camera.h"
+#include "ray.h"
+#include "hit.h"
 
 // ambient color model: the ambient color vector is used as a scale for the 
 // obj color. 

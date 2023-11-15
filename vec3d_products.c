@@ -1,5 +1,8 @@
 #include <math.h>
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
+#include "structs.h"
 #include "vec3d.h"
 
 double	vec_dot(t_vec3d v, t_vec3d w)
@@ -9,14 +12,11 @@ double	vec_dot(t_vec3d v, t_vec3d w)
 
 t_vec3d	vec_cross(t_vec3d v, t_vec3d w)
 {
-	t_vec3d		vector;
-
-	vector = (t_vec3d){
+	return ((t_vec3d){
 		.x = v.y * w.z - v.z * w.y,
 		.y = v.z * w.x - v.x * w.z,
 		.z = v.x * w.y - v.y * w.x,
-	};
-	return (vector);
+	});
 }
 
 t_vec3d	vec_norm(t_vec3d v)

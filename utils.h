@@ -1,5 +1,5 @@
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef UTILS_H
+# define UTILS_H
 
 # define MULT_AMB "multiple definition of ambient lights!"
 # define BAD_AMB "bad definition of ambient lights!"
@@ -20,5 +20,8 @@
 bool	ft_error(char *m1, char *m2, char *m3);
 bool	ft_error2(char *m1, char *m2, char *m3, void *to_free);
 bool	ft_error3(char **arr, char *m1);
+
+int		ft_arrlen(char **arr);
+void	free_arr(char **arr);
 
 #endif

@@ -1,10 +1,5 @@
 #include "libft.h"
-#include "error.h"
-#include "structs.h"
-#include "vec3d.h"
-#include "miniRT.h"
-
-#include <stdbool.h>
+#include "utils.h"
 
 bool	ft_error(char *m1, char *m2, char *m3)
 {

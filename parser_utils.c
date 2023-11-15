@@ -1,8 +1,13 @@
+#include <math.h>
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
+#include "vec3d.h"
+#include "colors.h"
 #include "parse.h"
-#include "error.h"
-#include "miniRT.h"
+#include "utils.h"
+
 
 bool	parse_vec(t_vec3d *vec, char *str)
 {
