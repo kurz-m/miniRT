@@ -49,9 +49,9 @@ bool	parse_color(t_color *col, char *str)
 		|| !parse_int(&g, args[1], 0, 255)
 		|| !parse_int(&b, args[2], 0, 255))
 		return (free_arr(args), false);
-	col->r = (uint8_t)r;
-	col->g = (uint8_t)g;
-	col->b = (uint8_t)b;
+	col->r = (double)r / 255.;
+	col->g = (double)g / 255.;
+	col->b = (double)b / 255.;
 	free_arr(args);
 	return (true);
 }

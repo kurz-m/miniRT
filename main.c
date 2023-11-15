@@ -19,47 +19,30 @@
 // see here https://learnwebgl.brown37.net/09_lights/lights_ambient.html
 t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
 {
-	double	hr;
-	double	hg;
-	double	hb;
-
-	hr = sc->amb.color.r * sc->amb.ratio / 255;
-	hg = sc->amb.color.g * sc->amb.ratio / 255;
-	hb = sc->amb.color.b * sc->amb.ratio / 255;
 	return ((t_color){
-		.r = hit->obj->color.r * hr,
-		.g = hit->obj->color.g * hg,
-		.b = hit->obj->color.b * hb
+		.r = hit->obj->color.r * sc->amb.color.r * sc->amb.ratio,
+		.g = hit->obj->color.g * sc->amb.color.g * sc->amb.ratio,
+		.b = hit->obj->color.b * sc->amb.color.b * sc->amb.ratio,
 	});
 }
 
-t_color	get_diffuse_light(
-	t_color *obj_color, double angle, t_obj *obj)
+t_color	get_diffuse_light(t_color *obj_color, double angle, t_obj *obj)
 {
-	t_color		diffuse_color;
-	double		r;
-	double		g;
-	double		b;
-
-	r = (double)obj_color->r * (angle * obj->light.brightness * ((double)obj->color.r / 256.0));
-	g = (double)obj_color->g * (angle * obj->light.brightness * ((double)obj->color.g / 256.0));
-	b = (double)obj_color->b * (angle * obj->light.brightness * ((double)obj->color.b / 256.0));
-	diffuse_color = (t_color){
-		.r = (int)r,
-		.g = (int)g,
-		.b = (int)b,
-	};
-	return (diffuse_color);
+	return ((t_color){
+		.r = obj_color->r * angle * obj->light.brightness * obj->color.r,
+		.g = obj_color->g * angle * obj->light.brightness * obj->color.g,
+		.b = obj_color->b * angle * obj->light.brightness * obj->color.b,
+	});
 }
 
 void	color_clamp(t_color *color)
 {
-	if (color->r > 255)
-		color->r = 255;
-	if (color->g > 255)
-		color->g = 255;
-	if (color->b > 255)
-		color->b = 255;
+	if (color->r > 1.0)
+		color->r = 1.0;
+	if (color->g > 1.0)
+		color->g = 1.0;
+	if (color->b > 1.0)
+		color->b = 1.0;
 }
 
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
@@ -94,8 +77,8 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 	}
 	t_vec3d unit_direction = vec_norm(ray->dir);
 	double a = 0.5 * (unit_direction.y + 1.0);
-	t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
-	t_color end_col = color_scale(color_new(0, 0, 255), a);
+	t_color start_col = color_scale(color_new(1, 1, 1), (1.0 - a));
+	t_color end_col = color_scale(color_new(0, 0, 1), a);
 	return color_add(start_col, end_col);
 	// return (color_new(0,0,0));
 }

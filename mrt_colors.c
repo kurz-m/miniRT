@@ -2,7 +2,7 @@
 
 uint32_t	get_rgba_from_tcol(t_color col)
 {
-	return (get_rgba(col.r, col.g, col.b, 255));
+	return (get_rgba(col.r * 255, col.g * 255, col.b * 255, 255));
 }
 
 uint32_t	get_rgba(int r, int g, int b, int a)
@@ -10,7 +10,7 @@ uint32_t	get_rgba(int r, int g, int b, int a)
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-t_color	color_new(int r, int g, int b)
+t_color	color_new(double r, double g, double b)
 {
 	return ((t_color){.r = r, .g = g, .b = b});
 }
