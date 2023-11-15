@@ -17,7 +17,9 @@ double	hit_plane(t_obj *obj, t_ray *ray, t_vec3d *norm)
 	{
 		temp = vec_sub(obj->pos, ray->origin);
 		t = vec_dot(temp, obj->pl.dir) / denom;
-		if (norm)
+		if (vec_dot(ray->dir, obj->pl.dir) >= 0 && norm)
+			*norm = vec_scale(obj->pl.dir, -1.);
+		else if (norm)
 			*norm = obj->pl.dir;
 		return (t);
 	}
