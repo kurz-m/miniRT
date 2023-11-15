@@ -18,12 +18,6 @@ bool	hit_objects(t_scene *scene, t_ray *ray, t_hitrec *hitrec)
 	while (i < scene->n_obj)
 	{
 		t = scene->objs[i].hit(&(scene->objs[i]), ray, &norm);
-		// if (scene->objs[i].type == SPHERE)
-		// 	t = hit_sphere(&(scene->objs[i]), ray, &norm);
-		// else if (scene->objs[i].type == CYLINDER)
-		// 	t = hit_cylinder(&(scene->objs[i]), ray, &norm);
-		// else if (scene->objs[i].type == PLANE)
-		// 	t = hit_plane(&(scene->objs[i]), ray, &norm);
 		if (1e-6 < t && t < hitrec->t)
 		{
 			hitrec->t = t;
