@@ -216,13 +216,13 @@ int32_t main(int32_t argc, const char* argv[])
 	t_render		r[THREAD_NO];
 	int				i;
 
-	if (argc != 1)
+	if (argc != 2)
 		return (EXIT_FAILURE);
 	scene = (t_scene){};
 	i = 0;
-	parse(&scene, argv[1]);
+	parse(&scene, (char *)argv[1]);
 	init_cam(&scene.cam);
-	if (init_mlx(mlx, image))
+	if (init_mlx(&mlx, &image))
 		return (EXIT_FAILURE);
 	param = (t_param){.mlx = mlx, .image = image, .scene = &scene};
 	while (i < THREAD_NO)

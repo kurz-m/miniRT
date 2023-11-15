@@ -16,26 +16,27 @@ static t_vec3d	calc_pixel_ul(t_cam *cam, t_vec3d cam_vec)
 	return (corner);
 }
 
-bool	init_mlx(mlx_t *mlx, mlx_image_t* image)
+bool	init_mlx(mlx_t** mlx, mlx_image_t** image)
 {
 	// Gotta error check this stuff
-	if (!(mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
+	if (!(*mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
 	{
 		puts(mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
-	if (!(image = mlx_new_image(mlx, WIDTH, HEIGHT)))
+	if (!(*image = mlx_new_image(*mlx, WIDTH, HEIGHT)))
 	{
-		mlx_close_window(mlx);
+		mlx_close_window(*mlx);
 		puts(mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
-	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
+	if (mlx_image_to_window(*mlx, *image, 0, 0) == -1)
 	{
-		mlx_close_window(mlx);
+		mlx_close_window(*mlx);
 		puts(mlx_strerror(mlx_errno));
 		return(EXIT_FAILURE);
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	init_cam(t_cam *cam)
