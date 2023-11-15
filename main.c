@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <time.h>
 #include <math.h>
+#include <fcntl.h>
 
 // -----------------------------------------------------------------------------
 // Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
@@ -61,9 +62,9 @@ t_color	get_diffuse_light(
 	double		g;
 	double		b;
 
-	r = (double)obj_color->r * (angle * obj->light.brightness * ((double)obj->color.r / 255.0));
-	g = (double)obj_color->g * (angle * obj->light.brightness * ((double)obj->color.g / 255.0));
-	b = (double)obj_color->b * (angle * obj->light.brightness * ((double)obj->color.b / 255.0));
+	r = (double)obj_color->r * (angle * obj->light.brightness * ((double)obj->color.r / 256.0));
+	g = (double)obj_color->g * (angle * obj->light.brightness * ((double)obj->color.g / 256.0));
+	b = (double)obj_color->b * (angle * obj->light.brightness * ((double)obj->color.b / 256.0));
 	diffuse_color = (t_color){
 		.r = (int)r,
 		.g = (int)g,
@@ -74,7 +75,6 @@ t_color	get_diffuse_light(
 	//	.g = obj_color->g * (angle * obj->light.brightness * (obj->color.g / 255)),
 	//	.b = obj_color->b * (angle * obj->light.brightness * (obj->color.b / 255)),
 	//};
-
 	return (diffuse_color);
 }
 
@@ -105,7 +105,7 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 		light_ray = ray_new(hitrec.p, vec_sub(scene->lights->pos, hitrec.p));
 		norm = hitrec.normal;
 		hit_objects(scene, &light_ray, &hit_light);
-		if (hitrec.t > vec_len(vec_sub(scene->lights->pos, hitrec.p)))
+		if (hit_light.t >= 0 && hit_light.t >= vec_len(vec_sub(scene->lights->pos, hitrec.p)))
 		{
 			angle = fmax(vec_dot(norm, light_ray.dir), 0.0f);
 			color = color_add(color, get_diffuse_light(&(hitrec.obj->color), angle, scene->lights));
@@ -143,10 +143,14 @@ void	*do_render(void *arg)
 	t_vec3d		ray_dir;
 	t_ray		ray;
 	t_color		color;
+	// int			fd;
 
+	// fd = open("img.ppm", O_WRONLY | O_CREAT);
 	render = (t_render *)arg;
 	scene = render->scene;
 	image = render->image;
+	// ft_fprintf(fd, "P3\n");
+	// ft_fprintf(fd, "%d %d\n255\n", WIDTH, HEIGHT);
 	for (int j = 0; j < (int)image->height; ++j) {
 		for (int i = 0; i < (int)image->width; ++i) {
 			pixel_center = get_pixel_center(&scene->cam, i, j);
@@ -159,9 +163,11 @@ void	*do_render(void *arg)
 			// 	ray = ray_new(scene->cam.pov, ray_dir);
 			// 	color = color_scale(color_add(get_ray_color(scene, &ray), color), 0.5);
 			// }
+			// ft_fprintf(fd, "%i %i %i\n", color.r, color.g, color.b);
 			mlx_put_pixel(image, i, j, get_rgba_from_tcol(color));
 		}
 	}
+	// close(fd);
 	return (NULL);
 }
 
