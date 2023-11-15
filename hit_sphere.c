@@ -8,7 +8,6 @@
 
 double	hit_sphere(t_obj *obj, t_ray *ray, t_vec3d *norm)
 {
-	t_list		*objects;
 	double		t;
 
 	t_vec3d	oc = vec_sub(ray->origin, obj->pos);

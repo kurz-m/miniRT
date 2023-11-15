@@ -125,4 +125,26 @@ bool	parse_int(int *val, char *s, int lower, int upper);
  */
 bool	parse_double(double *val, char *s, double lower, double upper);
 
+void	copy_lights(t_scene *scene, t_parse *parse);
+
+void	copy_sphere(t_scene *scene, t_obj *obj, int i);
+
+void	copy_cylinder(t_scene *scene, t_obj *obj, int i);
+
+void	copy_plane(t_scene *scene, t_obj *obj, int i);
+
+void	copy_objs(t_scene *scene, t_parse *parse);
+
+bool	parse_vec(t_vec3d *vec, char *str);
+
+bool	parse_norm_vec(t_vec3d *vec, char *str);
+
+bool	parse_color(t_color *col, char *str);
+
+bool	parse_int(int *val, char *s, int lower, int upper);
+
+bool	parse_double(double *val, char *s, double lower, double upper);
+
+double	ft_strtod(const char *s);
+
 #endif

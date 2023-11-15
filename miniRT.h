@@ -12,9 +12,8 @@
 # define HEIGHT 720
 # define T_MIN 1e-6
 # define T_MAX 1000
-# define AA_SAMPLES 1
+# define AA_SAMPLES 10
 
-double	ft_strtod(const char *s);
 int		ft_arrlen(char **arr);
 void	free_arr(char **arr);
 

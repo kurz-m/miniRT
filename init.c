@@ -15,6 +15,8 @@ static t_vec3d	calc_pixel_ul(t_cam *cam, t_vec3d cam_vec)
 	return (corner);
 }
 
+// void	init_mlx
+
 void	init_cam(t_cam *cam)
 {
 	t_vec3d		cam_vec;

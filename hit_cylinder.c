@@ -9,8 +9,9 @@
 static double	hit_disk(t_obj *obj, t_ray *ray, double radius)
 {
 	double	t;
+	t_vec3d	norm;
 
-	t = hit_plane(obj, ray, NULL);
+	t = hit_plane(obj, ray, &norm);
 	if (t >= 0)
 	{
 		t_vec3d	p = ray_at(ray, t);
@@ -33,9 +34,12 @@ static double	hit_cyl_wall(t_obj *obj, t_ray *ray)
 	double	m;
 
 	x = vec_sub(ray->origin, obj->pos);
-	a = vec_sqr_len(ray->dir) - vec_dot(ray->dir, obj->cy.dir) * vec_dot(ray->dir, obj->cy.dir);
-	half_b = vec_dot(ray->dir, x) - vec_dot(ray->dir, obj->cy.dir) * vec_dot(x, obj->cy.dir);
-	c = vec_sqr_len(x) - vec_dot(x, obj->cy.dir) * vec_dot(x, obj->cy.dir) - obj->cy.diam * obj->cy.diam / 4;
+	a = vec_sqr_len(ray->dir) - vec_dot(ray->dir, obj->cy.dir)
+		* vec_dot(ray->dir, obj->cy.dir);
+	half_b = vec_dot(ray->dir, x) - vec_dot(ray->dir, obj->cy.dir)
+		* vec_dot(x, obj->cy.dir);
+	c = vec_sqr_len(x) - vec_dot(x, obj->cy.dir) * vec_dot(x, obj->cy.dir)
+		- obj->cy.diam * obj->cy.diam / 4;
 	disc = half_b * half_b -  a * c;
 	if (disc < 0.)
 		return (-1.0);
@@ -83,7 +87,6 @@ static void	get_surf_norm_cyl(t_obj *obj, t_ray *ray, double t, t_vec3d *norm)
 
 double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *norm)
 {
-	t_obj	d[2];
 	double	t[3];
 	int		i;
 
@@ -91,26 +94,17 @@ double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *norm)
 		.pos = vec_add(obj->pos, vec_scale(obj->cy.dir, obj->cy.height / 2))},
 		ray, obj->cy.diam / 2);
 	t[1] = hit_disk(&(t_obj){.type = PLANE, .pl.dir = obj->cy.dir,
-		.pos = vec_add(obj->pos, vec_scale(obj->cy.dir, -(obj->cy.height / 2)))},
+		.pos = vec_add(obj->pos, vec_scale(obj->cy.dir, -obj->cy.height / 2))},
 		ray, obj->cy.diam / 2);
 	t[2] = hit_cyl_wall(obj, ray);
 	i = find_smallest_pos_t(t);
 	if (i == -1)
 		return (-1.0);
 	else if (i == 0)
-	{
-		if (norm)
-			*norm = obj->cy.dir;
-	}
+		*norm = obj->cy.dir;
 	else if (i == 1)
-	{
-		if (norm)
-			*norm = vec_scale(obj->cy.dir, -1.);
-	}
+		*norm = vec_scale(obj->cy.dir, -1.);
 	else if (i == 2)
-	{
-		if (norm)
-			get_surf_norm_cyl(obj, ray, t[2], norm);
-	}
+		get_surf_norm_cyl(obj, ray, t[2], norm);
 	return (t[i]);
 }

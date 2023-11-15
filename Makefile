@@ -35,10 +35,13 @@ MLX42 := $(MLX_DIR)/build/libmlx42.a
 ###############                  SOURCE FILES                     ##############
 ################################################################################
 
-SRCS := ft_strtod.c helpers.c main.c parse_obj1.c parse_obj2.c parser.c
+
+SRCS := helpers.c main.c
+SRCS += hit_core.c hit_cylinder.c hit_plane.c hit_sphere.c
+SRCS += parser_core.c parser_copy.c parser_obj_hittable.c
+SRCS += parser_obj_scene.c parser_strtod.c parser_utils.c
 SRCS += mrt_colors.c camera_utils.c init.c ray.c
-SRCS += vec3d_core.c vec3d_products.c vec3d_utils.c hit_sphere.c
-SRCS += hit_core.c hit_plane.c hit_cylinder.c
+SRCS += vec3d_core.c vec3d_products.c vec3d_utils.c
 
 HEADS := colors.h error.h hit.h init.h miniRT.h parse.h ray.h structs.h vec3d.h
 
@@ -48,8 +51,8 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 ########                         COMPILING                      ################
 ################################################################################
 
-CFLAGS := -g3 $(addprefix -I, $(INC_DIRS)) -MMD -MP
-# CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
+# CFLAGS := -g3 $(addprefix -I, $(INC_DIRS)) -MMD -MP
+CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
 LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
 LDFLAGS += -ldl -lglfw -pthread -lm
 

@@ -11,29 +11,8 @@
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
-
-// -----------------------------------------------------------------------------
-// Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
-// See README in the root project for more information.
-// -----------------------------------------------------------------------------
-
 #include "MLX42.h"
 
-static mlx_image_t* image;
-
-// -----------------------------------------------------------------------------
-
-
-
-// void ft_hook(void* param)
-// {
-// 	mlx_t* mlx = param;
-
-// 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-// 		mlx_close_window(mlx);
-// }
-
-// -----------------------------------------------------------------------------
 
 // ambient color model: the ambient color vector is used as a scale for the 
 // obj color. 
@@ -70,11 +49,6 @@ t_color	get_diffuse_light(
 		.g = (int)g,
 		.b = (int)b,
 	};
-	//diffuse_color = (t_color){
-	//	.r = obj_color->r * (angle * obj->light.brightness * (obj->color.r / 255)),
-	//	.g = obj_color->g * (angle * obj->light.brightness * (obj->color.g / 255)),
-	//	.b = obj_color->b * (angle * obj->light.brightness * (obj->color.b / 255)),
-	//};
 	return (diffuse_color);
 }
 
@@ -90,7 +64,6 @@ void	color_clamp(t_color *color)
 
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
-	t_color		new;
 	t_hitrec	hitrec;
 	t_hitrec	hit_light;
 	t_vec3d		norm;
@@ -196,7 +169,7 @@ void	*do_render(void *arg)
 void	ft_turn_hook(void *in)
 {
 	t_param		*param;
-	static bool	changed;
+	//static bool	changed;
 
 	param = (t_param *)in;
 	if (mlx_is_key_down(param->mlx, MLX_KEY_ESCAPE))
@@ -232,10 +205,13 @@ void	ft_turn_hook(void *in)
 
 int32_t main(int32_t argc, const char* argv[])
 {
-	mlx_t* mlx;
-	t_scene	scene;
-	t_param		param;
+	mlx_t*			mlx;
+	t_scene			scene;
+	t_param			param;
+	mlx_image_t*	image;
 
+	(void)argc;
+	(void)argv;
 	scene = (t_scene){};
 	parse(&scene, "test.rt");
 	init_cam(&scene.cam);
