@@ -1,5 +1,5 @@
 NAME := miniRT
-.DEFAULT_GOAL := multi
+.DEFAULT_GOAL := all
 CC := cc
 
 ################################################################################
@@ -35,12 +35,12 @@ MLX42 := $(MLX_DIR)/build/libmlx42.a
 ###############                  SOURCE FILES                     ##############
 ################################################################################
 
-SRCS := ft_strtod.c helpers.c main.c parse_obj1.c parse_obj2.c parser.c
+SRCS := main.c utils.c
+SRCS += hit_core.c hit_cylinder.c hit_plane.c hit_sphere.c
+SRCS += parser_core.c parser_copy.c parser_obj_hittable.c
+SRCS += parser_obj_scene.c parser_strtod.c parser_utils.c
 SRCS += mrt_colors.c camera_utils.c init.c ray.c
-SRCS += vec3d_core.c vec3d_products.c vec3d_utils.c hit_sphere.c
-SRCS += hit_core.c hit_plane.c hit_cylinder.c
-
-HEADS := colors.h error.h hit.h init.h miniRT.h parse.h ray.h structs.h vec3d.h
+SRCS += vec3d_core.c vec3d_products.c vec3d_utils.c
 
 OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 
@@ -48,7 +48,7 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 ########                         COMPILING                      ################
 ################################################################################
 
-CFLAGS := -g3 $(addprefix -I, $(INC_DIRS)) -MMD -MP
+CFLAGS := -O3 -c $(addprefix -I, $(INC_DIRS)) -MMD -MP
 # CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
 LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
 LDFLAGS += -ldl -lglfw -pthread -lm
@@ -59,7 +59,7 @@ $(NAME): $(LIBFT) $(MLX42) $(OBJS)
 	@$(LOG) "Linking object files to $@"
 	@$(CC) $^ $(LDFLAGS) -o $@
 
-$(OBJ_DIR)/%.o: %.c $(HEADS) | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@$(LOG) "Compiling $(notdir $@)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
@@ -105,7 +105,7 @@ fclean: clean
 
 re: fclean multi
 
--include $(OBJS:%.o=%.d)
+-include $(OBJS:$(OBJ_DIR)/%.o=$(OBJ_DIR)/%.d)
 
 .PHONY: all fclean clean re submodules multi
 

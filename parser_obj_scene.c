@@ -1,9 +1,12 @@
-#include "libft.h"
-#include "structs.h"
-#include "parse.h"
-#include "error.h"
-#include "miniRT.h"
 #include <stdbool.h>
+#include "MLX42.h"
+#include "libft.h"
+#include "defines.h"
+#include "structs.h"
+#include "vec3d.h"
+#include "parse.h"
+#include "utils.h"
+#include "camera.h"
 
 bool	parse_ambient(t_parse *p, char **args)
 {

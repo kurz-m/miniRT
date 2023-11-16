@@ -1,14 +1,6 @@
 #ifndef HIT_H
 # define HIT_H
 
-typedef struct s_hitrec
-{
-	t_point3d	p;
-	t_vec3d		normal;
-	double		t;
-	t_obj		*obj;
-}	t_hitrec;
-
 /// @brief Main entry point for calculating intersections between
 /// objects and the ray
 /// @param scene Main struct holding all the elements

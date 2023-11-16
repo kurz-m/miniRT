@@ -1,147 +1,150 @@
+#include <time.h>
+#include <math.h>
+#include <fcntl.h>
+#include <pthread.h>
+#include "MLX42.h"
 #include "libft.h"
+#include "defines.h"
 #include "structs.h"
 #include "parse.h"
-#include "miniRT.h"
 #include "vec3d.h"
 #include "init.h"
 #include "colors.h"
+#include "camera.h"
 #include "ray.h"
 #include "hit.h"
-#include <pthread.h>
-#include <time.h>
-
-// -----------------------------------------------------------------------------
-// Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
-// See README in the root project for more information.
-// -----------------------------------------------------------------------------
-
-#include "MLX42.h"
-
-static mlx_image_t* image;
-
-// -----------------------------------------------------------------------------
-
-
-
-// void ft_hook(void* param)
-// {
-// 	mlx_t* mlx = param;
-
-// 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-// 		mlx_close_window(mlx);
-// }
-
-// -----------------------------------------------------------------------------
 
 // ambient color model: the ambient color vector is used as a scale for the 
 // obj color. 
 // see here https://learnwebgl.brown37.net/09_lights/lights_ambient.html
 t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
 {
-	double	hr;
-	double	hg;
-	double	hb;
-
-	hr = sc->amb.color.r * sc->amb.ratio / 255;
-	hg = sc->amb.color.g * sc->amb.ratio / 255;
-	hb = sc->amb.color.b * sc->amb.ratio / 255;
 	return ((t_color){
-		.r = hit->obj->color.r * hr,
-		.g = hit->obj->color.g * hg,
-		.b = hit->obj->color.b * hb
+		.r = hit->obj->color.r * sc->amb.color.r * sc->amb.ratio,
+		.g = hit->obj->color.g * sc->amb.color.g * sc->amb.ratio,
+		.b = hit->obj->color.b * sc->amb.color.b * sc->amb.ratio,
 	});
+}
+
+t_color	get_diffuse_light(t_color *obj_color, double angle, t_obj *obj)
+{
+	return ((t_color){
+		.r = obj_color->r * angle * obj->light.brightness * obj->color.r,
+		.g = obj_color->g * angle * obj->light.brightness * obj->color.g,
+		.b = obj_color->b * angle * obj->light.brightness * obj->color.b,
+	});
+}
+
+void	color_clamp(t_color *color)
+{
+	if (color->r > 1.0)
+		color->r = 1.0;
+	if (color->g > 1.0)
+		color->g = 1.0;
+	if (color->b > 1.0)
+		color->b = 1.0;
+}
+
+static t_color	get_obj_lumination(t_scene *scene, t_hitrec *hitrec)
+{
+	double		angle;
+	int			i;
+	t_lumi		l;
+
+	l.color = get_ambient_color(scene, hitrec);
+	i = -1;
+	while (++i < scene->n_light)
+	{
+		l.light_ray = ray_new(hitrec->p,
+				vec_sub(scene->lights[i].pos, hitrec->p));
+		l.norm = hitrec->normal;
+		hit_objects(scene, &l.light_ray, &l.hit_light);
+		if (l.hit_light.t >= 0 && l.hit_light.t >= vec_len(vec_sub(
+					scene->lights[i].pos, hitrec->p)))
+		{
+			angle = fmax(vec_dot(l.norm, l.light_ray.dir), 0.0f);
+			l.color = color_add(l.color, get_diffuse_light(
+						&(hitrec->obj->color), angle, scene->lights + i));
+			color_clamp(&l.color);
+		}
+	}
+	return (l.color);
+}
+
+t_color	get_background_color(t_ray *ray)
+{
+	t_vec3d	unit_direction;
+	double	a;
+	t_color	start_col;
+	t_color	end_col;
+
+	unit_direction = vec_norm(ray->dir);
+	a = 0.5 * (unit_direction.y + 1.0);
+	start_col = color_scale(color_new(1, 1, 1), (1.0 - a));
+	end_col = color_scale(color_new(0, 0, 1), a);
+	return (color_add(start_col, end_col));
 }
 
 t_color	get_ray_color(t_scene *scene, t_ray *ray)
 {
-	t_color		new;
 	t_hitrec	hitrec;
-	t_vec3d		norm;
+	t_color		color;
 
+	color = color_new(0, 0, 0);
 	if (hit_objects(scene, ray, &hitrec))
 	{
-		// return (get_ambient_color(scene, &hitrec));
-		norm = hitrec.normal;
-		new = color_new(norm.x * 255, norm.y * 255, norm.z * 255);
-		new = color_add(new, color_new(255, 255, 255));
-		return (color_scale(new, 0.5));
+		return (color_add(color, get_obj_lumination(scene, &hitrec)));
 	}
-	t_vec3d unit_direction = vec_norm(ray->dir);
-	double a = 0.5 * (unit_direction.y + 1.0);
-	t_color start_col = color_scale(color_new(255, 255, 255), (1.0 - a));
-	t_color end_col = color_scale(color_new(0, 0, 255), a);
-	return color_add(start_col, end_col);
-	// return (color_new(0,0,0));
+	return (get_background_color(ray));
 }
 
-typedef struct s_render
+t_color	get_px_color(t_scene *scene, int i, int j)
 {
-	t_scene		*scene;
-	mlx_image_t	*image;
-}	t_render;
-
-typedef struct s_param
-{
-	mlx_t		*mlx;
-	pthread_t	thread;
-	t_render	render;
-}	t_param;
-
-void	*do_render(void *arg)
-{
-	t_render	*render;
-	t_scene 	*scene;
-	mlx_image_t	*image;
 	t_point3d	pixel_center;
 	t_vec3d		ray_dir;
 	t_ray		ray;
 	t_color		color;
 
+	pixel_center = get_pixel_center(&scene->cam, i, j);
+	ray_dir = vec_sub(pixel_center, scene->cam.pov);
+	ray = ray_new(scene->cam.pov, ray_dir);
+	color = get_ray_color(scene, &ray);
+	return (color);
+}
+
+void	*do_render(void *arg)
+{
+	t_render	*render;
+	t_scene		*scene;
+	mlx_image_t	*image;
+	int			j_off;
+	int			ij[2];
+
 	render = (t_render *)arg;
 	scene = render->scene;
 	image = render->image;
-	for (int j = 0; j < (int)image->height; ++j) {
-		for (int i = 0; i < (int)image->width; ++i) {
-			pixel_center = get_pixel_center(&scene->cam, i, j);
-			ray_dir = vec_sub(pixel_center, scene->cam.pov);
-			ray = ray_new(scene->cam.pov, ray_dir);
-			color = get_ray_color(scene, &ray);
-			for (int samples = 0; samples < AA_SAMPLES - 1; samples++) {
-				pixel_center = get_pixel_random(&scene->cam, i, j);
-				ray_dir = vec_sub(pixel_center, scene->cam.pov);
-				ray = ray_new(scene->cam.pov, ray_dir);
-				color = color_scale(color_add(get_ray_color(scene, &ray), color), 0.5);
-			}
-			mlx_put_pixel(image, i, j, get_rgba_from_tcol(color));
+	j_off = ((int)image->height / THREAD_NO) * render->i;
+	ij[1] = 0;
+	while (ij[1] < (int)image->height / THREAD_NO)
+	{
+		ij[0] = 0;
+		while (ij[0] < (int)image->width)
+		{
+			mlx_put_pixel(image, ij[0], ij[1] + j_off, get_rgba_from_tcol(
+					get_px_color(scene, ij[0], ij[1] + j_off)));
+			++(ij[0]);
 		}
+		++(ij[1]);
 	}
 	return (NULL);
 }
 
-// static void	move_cam(t_scene *sc, t_vec3d mov)
-// {
-// 	sc->cam.pov = vec_add(sc->cam.pov, mov);
-// }
-
-// static void	turn_cam(t_scene *sc, double horizontal, double vertical)
-// {
-// 	t_vec3d	new;
-
-// 	if (horizontal)
-// 		new = (t_vec3d){.x = horizontal};
-// 	else if(vertical)
-// 		new = (t_vec3d){.y = vertical};
-// 	sc->cam.dir = vec_norm(vec_add(sc->cam.dir, new));
-// }
-
-void	ft_turn_hook(void *in)
+void	ft_translation_hook(void *in)
 {
 	t_param		*param;
-	static bool	changed;
+	//static bool	changed;
 
 	param = (t_param *)in;
-	if (mlx_is_key_down(param->mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(param->mlx);
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_D))
 	// 	move_cam(param->render.scene, vec_new(2,0,0)), changed = true;
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_A))
@@ -150,6 +153,28 @@ void	ft_turn_hook(void *in)
 	// 	move_cam(param->render.scene, vec_new(0,2,0)), changed = true;
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_S))
 	// 	move_cam(param->render.scene, vec_new(0,-2,0)), changed = true;
+	// if (mlx_is_key_down(param->mlx, MLX_KEY_UP))
+	// if (changed)
+	// {
+	// 	if (param->thread)
+	// 	{
+	// 		// pthread_kill(param->thread, SIGINT);
+	// 		pthread_cancel(param->thread);
+	// 		pthread_join(param->thread, NULL);
+	// 	}
+	// 	pthread_create(&param->thread, NULL, &do_render, &(param->render));
+	// 	changed = false;
+	// }
+}
+
+void	ft_turn_hook(void *in)
+{
+	t_param		*param;
+	//static bool	changed;
+
+	param = (t_param *)in;
+	if (mlx_is_key_down(param->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(param->mlx);
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_UP))
 	// 	turn_cam(param->render.scene, 0, 0.2), init_cam(&(param->render.scene->cam)), changed = true;
 	// if (mlx_is_key_down(param->mlx, MLX_KEY_DOWN))
@@ -173,45 +198,30 @@ void	ft_turn_hook(void *in)
 
 int32_t main(int32_t argc, const char* argv[])
 {
-	mlx_t* mlx;
-	t_scene	scene;
-	t_param		param;
+	t_param			param;
+	t_scene			scene;
+	mlx_image_t*	image;
+	t_render		r[THREAD_NO];
+	int				i;
 
-	scene = (t_scene){};
-	parse(&scene, "test.rt");
+	if (argc != 2)
+		return (EXIT_FAILURE);
+	i = 0;
+	parse(&scene, (char *)argv[1]);
 	init_cam(&scene.cam);
-	srand(time(NULL));
-
-	// Gotta error check this stuff
-	if (!(mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
+	param = (t_param){.image = image, .scene = &scene};
+	if (init_mlx(&param.mlx, &image))
+		return (EXIT_FAILURE);
+	while (i < THREAD_NO)
 	{
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
+		r[i] = (t_render){.i = i, .image = image, .scene = &scene};
+		if (pthread_create(&param.thread[i], NULL, &do_render, r + i))
+			return (EXIT_FAILURE);
+		++i;
 	}
-	if (!(image = mlx_new_image(mlx, WIDTH, HEIGHT)))
-	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
-	}
-	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
-	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
-	}
-
-	param = (t_param)
-	{
-		.mlx = mlx,
-		.render = (t_render){.image = image, .scene = &scene},
-	};
-	pthread_create(&param.thread, NULL, &do_render, &(param.render));
-	// mlx_loop_hook(mlx, ft_hook, mlx);
-	mlx_loop_hook(mlx, ft_turn_hook, &param);
-
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
+	mlx_loop_hook(param.mlx, ft_turn_hook, &param);
+	mlx_loop(param.mlx);
+	mlx_terminate(param.mlx);
 	return (EXIT_SUCCESS);
 }
 

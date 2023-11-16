@@ -1,6 +1,8 @@
 #include "libft.h"
+#include "MLX42.h"
+#include "defines.h"
+#include "structs.h"
 #include "vec3d.h"
-#include <math.h>
 
 bool	vec_equal(t_vec3d v, t_vec3d w)
 {

@@ -1,7 +1,5 @@
+#include <math.h>
 #include "libft.h"
-#include "vec3d.h"
-#include "structs.h"
-#include "miniRT.h"
 
 static double	get_int_part(const char *s)
 {

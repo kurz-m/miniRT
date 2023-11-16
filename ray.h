@@ -1,11 +1,6 @@
 #ifndef RAY_H
 # define RAY_H
 
-typedef struct	s_ray {
-	t_point3d	origin;
-	t_vec3d		dir;
-}	t_ray;
-
 /// @brief Creates a new ray with the given origin and the direction
 /// @param origin Origin of the ray as t_point3d
 /// @param dir Direction of the rays as t_vec3d

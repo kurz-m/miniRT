@@ -1,6 +1,8 @@
-#include "libft.h"
 #include <stdbool.h>
 #include <math.h>
+#include "MLX42.h"
+#include "libft.h"
+#include "defines.h"
 #include "structs.h"
 #include "vec3d.h"
 #include "ray.h"
@@ -8,20 +10,21 @@
 
 double	hit_sphere(t_obj *obj, t_ray *ray, t_vec3d *norm)
 {
-	t_list		*objects;
-	double		t;
+	double	abc[3];
+	double	t;
+	double	disc;
+	t_vec3d	oc;
 
-	t_vec3d	oc = vec_sub(ray->origin, obj->pos);
-	double a = vec_sqr_len(ray->dir);
-	double half_b = vec_dot(oc, ray->dir);
-	double c = vec_sqr_len(oc) - (obj->sp.diameter * obj->sp.diameter / 4);
-	double disc = half_b * half_b -  a * c;
-
+	oc = vec_sub(ray->origin, obj->pos);
+	abc[0] = vec_sqr_len(ray->dir);
+	abc[1] = vec_dot(oc, ray->dir);
+	abc[2] = vec_sqr_len(oc) - (obj->sp.diameter * obj->sp.diameter / 4);
+	disc = abc[1] * abc[1] - abc[0] * abc[2];
 	if (disc < 0)
 		return (-1.0);
 	else
 	{
-		t = (-half_b - sqrt(disc)) / a;
+		t = (-abc[1] - sqrt(disc)) / abc[0];
 		*norm = vec_norm(vec_sub(ray_at(ray, t), obj->pos));
 		return (t);
 	}

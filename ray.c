@@ -1,13 +1,17 @@
+#include "MLX42.h"
+#include "libft.h"
+#include "defines.h"
+#include "structs.h"
 #include "vec3d.h"
 #include "ray.h"
 
-t_ray		ray_new(t_point3d origin, t_vec3d dir)
+t_ray	ray_new(t_point3d origin, t_vec3d dir)
 {
 	t_ray	ray;
 
 	ray = (t_ray){
 		.origin = origin,
-		.dir = dir,
+		.dir = vec_norm(dir),
 	};
 	return (ray);
 }
