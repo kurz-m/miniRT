@@ -143,8 +143,6 @@ bool	parse_color(t_color *col, char *str);
 
 bool	parse_int(int *val, char *s, int lower, int upper);
 
-bool	parse_double(double *val, char *s, double lower, double upper);
-
 double	ft_strtod(const char *s);
 
 #endif

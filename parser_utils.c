@@ -31,9 +31,9 @@ bool	parse_norm_vec(t_vec3d *vec, char *str)
 	args = ft_split(str, ',');
 	if (!args || ft_arrlen(args) != 3)
 		return (free_arr(args), false);
-	if (!parse_double(&vec->x, args[0], -1, 1)
-		|| !parse_double(&vec->y, args[1], -1, 1)
-		|| !parse_double(&vec->z, args[2], -1, 1))
+	if (!parse_double(&vec->x, args[0], -INFINITY, INFINITY)
+		|| !parse_double(&vec->y, args[1], -INFINITY, INFINITY)
+		|| !parse_double(&vec->z, args[2], -INFINITY, INFINITY))
 		return (free_arr(args), false);
 	*vec = vec_norm(*vec);
 	free_arr(args);
