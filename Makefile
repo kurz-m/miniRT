@@ -1,5 +1,5 @@
 NAME := miniRT
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := multi
 CC := cc
 
 ################################################################################
@@ -22,9 +22,7 @@ LIBFT_DIR := libft
 MLX_DIR := MLX42
 
 INC_DIRS := include $(LIBFT_DIR)/include $(MLX_DIR)/include/MLX42
-# SRC_DIRS := <all source dirs>
 
-# Tell the Makefile where headers and source files are
 vpath %.h $(INC_DIRS)
 # vpath %.c $(SRC_DIRS)
 
@@ -49,8 +47,7 @@ OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 ########                         COMPILING                      ################
 ################################################################################
 
-CFLAGS := -O3 -c $(addprefix -I, $(INC_DIRS)) -MMD -MP
-# CFLAGS ?= -Wextra -Wall -Werror -g -MMD -MP $(addprefix -I, $(INC_DIRS))
+CFLAGS ?= -Wextra -Wall -Werror -Ofast -g -MMD -MP $(addprefix -I, $(INC_DIRS))
 LDFLAGS := -L $(LIBFT_DIR) -lft -L $(MLX_DIR)/build -lmlx42
 LDFLAGS += -ldl -lglfw -pthread -lm
 

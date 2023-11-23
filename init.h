@@ -9,8 +9,6 @@
 /// Furthermore, it initializes the left uppermost pixel of
 /// the viewport.
 /// @param cam Struct holding the camera settings
-void	init_cam(t_cam *cam);
-
-bool	init_mlx(mlx_t** mlx, mlx_image_t** image);
+bool	init_main(mlx_t **mlx, mlx_image_t **image, t_cam *cam);
 
 #endif

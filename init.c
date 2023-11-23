@@ -16,31 +16,31 @@ static t_vec3d	calc_pixel_ul(t_cam *cam, t_vec3d cam_vec)
 	return (corner);
 }
 
-bool	init_mlx(mlx_t **mlx, mlx_image_t **image)
+static bool	init_mlx(mlx_t **mlx, mlx_image_t **image)
 {
 	*mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
 	if (mlx == NULL)
 	{
 		ft_fprintf(2, mlx_strerror(mlx_errno));
-		return (EXIT_FAILURE);
+		return (false);
 	}
 	*image = mlx_new_image(*mlx, WIDTH, HEIGHT);
 	if (image == NULL)
 	{
 		mlx_close_window(*mlx);
 		ft_fprintf(2, mlx_strerror(mlx_errno));
-		return (EXIT_FAILURE);
+		return (false);
 	}
 	if (mlx_image_to_window(*mlx, *image, 0, 0) == -1)
 	{
 		mlx_close_window(*mlx);
 		ft_fprintf(2, mlx_strerror(mlx_errno));
-		return (EXIT_FAILURE);
+		return (false);
 	}
-	return (EXIT_SUCCESS);
+	return (true);
 }
 
-void	init_cam(t_cam *cam)
+static void	init_cam(t_cam *cam)
 {
 	t_vec3d		cam_vec;
 	t_vec3d		tmp_vec;
@@ -56,4 +56,10 @@ void	init_cam(t_cam *cam)
 	cam->delta_u = vec_norm(cam->delta_u);
 	tmp_vec = vec_scale(vec_add(cam->delta_u, cam->delta_v), 0.5);
 	cam->pixel_ul = vec_add(tmp_vec, cam->pixel_ul);
+}
+
+bool	init_main(mlx_t **mlx, mlx_image_t **image, t_cam *cam)
+{
+	init_cam(cam);
+	return (init_mlx(mlx, image));
 }
