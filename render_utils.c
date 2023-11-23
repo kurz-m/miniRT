@@ -21,7 +21,7 @@ t_color	get_diffuse_light(t_color *obj_color, double angle, t_obj *obj)
 	});
 }
 
-static t_color	get_obj_lumination(t_scene *scene, t_hitrec *hitrec)
+t_color	get_obj_lumination(t_scene *scene, t_hitrec *hitrec)
 {
 	double		angle;
 	int			i;

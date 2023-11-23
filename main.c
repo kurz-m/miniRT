@@ -51,44 +51,31 @@ void	escape_hook(void *in)
 		mlx_close_window(param->mlx);
 }
 
-#include <stdio.h>
-
-void cleanup() {
-	char command[100];
-	pid_t pid = getpid();
-	sprintf(command, "leaks %d", pid);
-	system(command);
-}
-
 int32_t	main(int32_t argc, const char *argv[])
 {
-	t_param			param;
-	t_scene			scene;
+	t_param			p;
+	t_scene			s;
 	mlx_image_t		*image;
 	t_render		r[THREAD_NO];
 	int				i;
 
-	atexit(cleanup);
 	if (argc != 2)
 		return (EXIT_FAILURE);
 	i = 0;
-	if (parse(&scene, (char *)argv[1]) == false)
+	p = (t_param){};
+	if (!parse(&s, (char *)argv[1]) || !init_main(&p.mlx, &image, &s.cam))
 		return (EXIT_FAILURE);
-	init_cam(&scene.cam);
-	param = (t_param){.image = image, .scene = &scene};
-	if (init_mlx(&param.mlx, &image))
-		return (EXIT_FAILURE);
+	p.scene = &s;
+	p.image = image;
 	while (i < THREAD_NO)
 	{
-		r[i] = (t_render){.i = i, .image = image, .scene = &scene};
-		if (pthread_create(&param.thread[i], NULL, &do_render, r + i))
+		r[i] = (t_render){.i = i, .image = image, .scene = &s};
+		if (pthread_create(&p.thread[i], NULL, &do_render, r + i))
 			return (EXIT_FAILURE);
 		++i;
 	}
-	mlx_loop_hook(param.mlx, escape_hook, &param);
-	mlx_loop(param.mlx);
-	free(scene.lights);
-	free(scene.objs);
-	mlx_terminate(param.mlx);
-	return (EXIT_SUCCESS);
+	mlx_loop_hook(p.mlx, escape_hook, &p);
+	mlx_loop(p.mlx);
+	mlx_terminate(p.mlx);
+	return (free(s.lights), free(s.objs), EXIT_SUCCESS);
 }
