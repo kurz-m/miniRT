@@ -39,8 +39,9 @@ SRCS := main.c utils.c
 SRCS += hit_core.c hit_cylinder.c hit_plane.c hit_sphere.c
 SRCS += parser_core.c parser_copy.c parser_obj_hittable.c
 SRCS += parser_obj_scene.c parser_strtod.c parser_utils.c
-SRCS += mrt_colors.c camera_utils.c init.c ray.c
+SRCS += color_core.c color_utils.c camera_utils.c init.c ray.c
 SRCS += vec3d_core.c vec3d_products.c vec3d_utils.c
+SRCS += render_utils.c
 
 OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 

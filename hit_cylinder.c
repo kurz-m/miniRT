@@ -48,7 +48,8 @@ static double	hit_cyl_wall(t_obj *obj, t_ray *ray)
 	if (disc < 0.)
 		return (-1.0);
 	t = (-abcm[1] - sqrt(disc)) / abcm[0];
-	abcm[3] = vec_dot(ray->dir, vec_scale(obj->cy.dir, t)) + vec_dot(x, obj->cy.dir);
+	abcm[3] = vec_dot(ray->dir, vec_scale(obj->cy.dir, t))
+		+ vec_dot(x, obj->cy.dir);
 	if (fabs(abcm[3]) > obj->cy.height / 2)
 		return (-1.0);
 	return (t);

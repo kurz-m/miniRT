@@ -16,6 +16,7 @@
 # define BAD_CY "bad cylinder definition!"
 # define BAD_INT "bad integer value!"
 # define VAL_OUB "value out of bounds!"
+# define BAD_EXT "Wrong file extension!"
 
 bool	ft_error(char *m1, char *m2, char *m3);
 bool	ft_error2(char *m1, char *m2, char *m3, void *to_free);
