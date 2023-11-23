@@ -8,7 +8,6 @@
 #include "parse.h"
 #include "utils.h"
 
-
 bool	parse_vec(t_vec3d *vec, char *str)
 {
 	char	**args;

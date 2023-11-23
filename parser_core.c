@@ -35,6 +35,18 @@ static bool	parse_line(t_parse *p, char *line)
 	return (ret);
 }
 
+static bool	cleanup_parser(t_scene *scene, t_parse *parser, char flag)
+{
+	if (flag == 'B')
+	{
+		free(scene->lights);
+		free(scene->objs);
+	}
+	ft_lstclear(&parser->lights, &free);
+	ft_lstclear(&parser->objects, &free);
+	return (false);
+}
+
 static bool	init_obj(t_scene *scene, t_parse *parse)
 {
 	int		light_size;
@@ -54,18 +66,8 @@ static bool	init_obj(t_scene *scene, t_parse *parse)
 		return (false);
 	copy_objs(scene, parse);
 	copy_lights(scene, parse);
-	ft_lstclear(&(parse->lights), &free);
-	ft_lstclear(&(parse->objects), &free);
+	cleanup_parser(scene, parse, 'L');
 	return (true);
-}
-
-static bool	cleanup_parser(t_scene *scene, t_parse *parser)
-{
-	free(scene->lights);
-	free(scene->objs);
-	ft_lstclear(&parser->lights, &free);
-	ft_lstclear(&parser->objects, &free);
-	return (false);
 }
 
 bool	parse(t_scene *scene, char *filepath)
@@ -75,6 +77,8 @@ bool	parse(t_scene *scene, char *filepath)
 	char	*tmp_line;
 	char	*line;
 
+	if (ft_strncmp(filepath + ft_strlen(filepath) - 3, ".rt", 3))
+		return (ft_error(BAD_EXT, NULL, NULL));
 	parse = (t_parse){};
 	*scene = (t_scene){};
 	fd = open(filepath, O_RDONLY);
@@ -84,13 +88,13 @@ bool	parse(t_scene *scene, char *filepath)
 		line = ft_strtrim(tmp_line, "\n");
 		free(tmp_line);
 		if (!parse_line(&parse, line))
-			return (false);
+			return (free(line), cleanup_parser(scene, &parse, 'L'));
 		free(line);
 		tmp_line = get_next_line(fd);
 	}
 	if (init_obj(scene, &parse) == false)
 	{
-		return (cleanup_parser(scene, &parse));
+		return (cleanup_parser(scene, &parse, 'B'));
 	}
 	return (true);
 }
