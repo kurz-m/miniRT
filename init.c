@@ -40,6 +40,18 @@ static bool	init_mlx(mlx_t **mlx, mlx_image_t **image)
 	return (true);
 }
 
+/// @brief calculate the camera specs.
+/// 1. use the cross product of a random vector in the xz plane to get a
+/// perpendicular vector which is in the direction of v in the image. (=delta_v)
+/// 2. use the cross product of the delta_v and the cam_dir to get delta_u
+/// 3. scale both vectors to HEIGHT and WIDTH to get the full viewport size
+/// vectors and use them to calculate the upper left pixel vector from the
+/// camera origin.
+/// 4. norm both delta_u and delta_v again to get it to pixel scale.
+/// 5. use tmp_vec again as the vector from the upper left corner of the pixel
+/// to the pixel center and add it to the pixel_ul vector to get the pixel 
+/// center.
+/// @param cam 
 static void	init_cam(t_cam *cam)
 {
 	t_vec3d		cam_vec;
@@ -47,6 +59,8 @@ static void	init_cam(t_cam *cam)
 
 	tmp_vec = vec_new(1, 0, 0);
 	cam_vec = vec_scale(cam->dir, cam->foc);
+	if (vec_len(vec_cross(tmp_vec, cam_vec)) == 0)
+		tmp_vec = vec_new(0, 0, 1);
 	cam->delta_v = vec_norm(vec_cross(tmp_vec, cam_vec));
 	cam->delta_v = vec_scale(cam->delta_v, HEIGHT);
 	cam->delta_u = vec_norm(vec_cross(cam->dir, cam->delta_v));
