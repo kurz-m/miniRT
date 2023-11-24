@@ -43,6 +43,7 @@ struct s_hitrec
 	t_vec3d		normal;
 	double		t;
 	t_obj		*obj;
+	t_ray		*ray;
 };
 
 struct	s_parse

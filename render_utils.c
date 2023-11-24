@@ -21,6 +21,29 @@ t_color	get_diffuse_light(t_color *obj_color, double angle, t_obj *obj)
 	});
 }
 
+#include <stdio.h>
+
+static t_color	get_specular(t_hitrec *hitrec, t_lumi *l)
+{
+	t_vec3d	r;
+	double	r_dot_v;
+	double	n_dot_l;
+	double	power;
+
+	n_dot_l = vec_dot(hitrec->normal, l->light_ray.dir);
+	r = vec_scale(hitrec->normal, 2.0);
+	r = vec_scale(r, n_dot_l);
+	r = vec_sub(r, l->light_ray.dir);
+	r_dot_v = vec_dot(r, vec_scale(hitrec->ray->dir, -1));
+
+	if (r_dot_v > 1e-6)
+	{
+		power = pow(r_dot_v / (vec_len(r) * vec_len(hitrec->ray->dir)), 100);
+		return (color_scale(color_new(1, 1, 1), power));
+	}
+	return (color_new(0, 0, 0));
+}
+
 t_color	get_obj_lumination(t_scene *scene, t_hitrec *hitrec)
 {
 	double		angle;
@@ -41,6 +64,7 @@ t_color	get_obj_lumination(t_scene *scene, t_hitrec *hitrec)
 			angle = fmax(vec_dot(l.norm, l.light_ray.dir), 0.0f);
 			l.color = color_add(l.color, get_diffuse_light(
 						&(hitrec->obj->color), angle, scene->lights + i));
+			l.color = color_add(l.color, get_specular(hitrec, &l));
 			color_clamp(&l.color);
 		}
 	}
@@ -52,6 +76,7 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 	t_hitrec	hitrec;
 	t_color		color;
 
+	hitrec.ray = ray;
 	color = color_new(0, 0, 0);
 	if (hit_objects(scene, ray, &hitrec))
 	{
