@@ -5,7 +5,7 @@
 #include "structs.h"
 #include "vec3d.h"
 
-t_vec3d	vec_new(double x, double y, double z)
+t_vec3d	vec_new(const double x, const double y, const double z)
 {
 	return ((t_vec3d){
 		.x = x,
@@ -14,7 +14,7 @@ t_vec3d	vec_new(double x, double y, double z)
 	});
 }
 
-t_vec3d	vec_add(t_vec3d v, t_vec3d w)
+t_vec3d	vec_add(const t_vec3d v, const t_vec3d w)
 {
 	return ((t_vec3d){
 		.x = v.x + w.x,
@@ -23,7 +23,7 @@ t_vec3d	vec_add(t_vec3d v, t_vec3d w)
 	});
 }
 
-t_vec3d	vec_sub(t_vec3d v, t_vec3d w)
+t_vec3d	vec_sub(const t_vec3d v, const t_vec3d w)
 {
 	return ((t_vec3d){
 		.x = v.x - w.x,
@@ -32,7 +32,7 @@ t_vec3d	vec_sub(t_vec3d v, t_vec3d w)
 	});
 }
 
-t_vec3d	vec_scale(t_vec3d v, double scalar)
+t_vec3d	vec_scale(const t_vec3d v, const double scalar)
 {
 	return ((t_vec3d){
 		.x = v.x * scalar,
@@ -41,7 +41,7 @@ t_vec3d	vec_scale(t_vec3d v, double scalar)
 	});
 }
 
-double	vec_len(t_vec3d v)
+double	vec_len(const t_vec3d v)
 {
 	return (sqrt(vec_dot(v, v)));
 }

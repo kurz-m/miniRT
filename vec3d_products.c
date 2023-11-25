@@ -5,12 +5,12 @@
 #include "structs.h"
 #include "vec3d.h"
 
-double	vec_dot(t_vec3d v, t_vec3d w)
+double	vec_dot(const t_vec3d v, const t_vec3d w)
 {
 	return (v.x * w.x + v.y * w.y + v.z * w.z);
 }
 
-t_vec3d	vec_cross(t_vec3d v, t_vec3d w)
+t_vec3d	vec_cross(const t_vec3d v, const t_vec3d w)
 {
 	return ((t_vec3d){
 		.x = v.y * w.z - v.z * w.y,
@@ -19,12 +19,12 @@ t_vec3d	vec_cross(t_vec3d v, t_vec3d w)
 	});
 }
 
-t_vec3d	vec_norm(t_vec3d v)
+t_vec3d	vec_norm(const t_vec3d v)
 {
 	return (vec_scale(v, 1.0 / vec_len(v)));
 }
 
-double	vec_sqr_len(t_vec3d v)
+double	vec_sqr_len(const t_vec3d v)
 {
 	return (vec_dot(v, v));
 }
