@@ -11,6 +11,6 @@ t_ray		ray_new(t_point3d origin, t_vec3d dir);
 /// @param ray Ray from where to calculate the point
 /// @param t Real number to move point along the ray
 /// @return Point on the rays as t_point3d
-t_point3d	ray_at(t_ray *ray, double t);
+t_point3d	ray_at(const t_ray *ray, const double t);
 
 #endif

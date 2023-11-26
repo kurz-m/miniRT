@@ -6,6 +6,9 @@
 # define T_MIN 1e-6
 # define T_MAX 1000
 # define AA_SAMPLES 10
-# define THREAD_NO 16
+
+# ifndef THREAD_NO
+#  define THREAD_NO 16
+# endif
 
 #endif

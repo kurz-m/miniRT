@@ -1,6 +1,12 @@
 #include <math.h>
 #include "libft.h"
 
+/**
+ * @brief Utility function to get the integer part of the double.
+ * 
+ * @param str String the double is being parsed from
+ * @return double The integer part of the double.
+ */
 static double	get_int_part(const char *s)
 {
 	double	num;
@@ -24,6 +30,12 @@ static double	get_int_part(const char *s)
 	return (sign * num);
 }
 
+/**
+ * @brief Utility function to get the fractional part of the double.
+ * 
+ * @param str String the double is being parsed from
+ * @return double The updated num with the fractional part.
+ */
 static double	get_fract_part(const char *str)
 {
 	double	num;

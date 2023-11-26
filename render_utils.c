@@ -12,7 +12,8 @@
 #include "hit.h"
 #include "render.h"
 
-t_color	get_diffuse_light(t_color *obj_color, double angle, t_obj *obj)
+t_color	get_diffuse_light(
+	const t_color *obj_color, const double angle, const t_obj *obj)
 {
 	return ((t_color){
 		.r = obj_color->r * angle * obj->light.brightness * obj->color.r,
@@ -21,9 +22,14 @@ t_color	get_diffuse_light(t_color *obj_color, double angle, t_obj *obj)
 	});
 }
 
-#include <stdio.h>
-
-static t_color	get_specular(t_hitrec *hitrec, t_lumi *l)
+/**
+ * @brief Utility to get the specular component of the light.
+ * 
+ * @param hitrec Struct containing parameters of currect hit object.
+ * @param l Struct containing the light parameters.
+ * @return t_color The scaled color.
+ */
+static t_color	get_specular(const t_hitrec *hitrec, const t_lumi *l)
 {
 	t_vec3d	r;
 	double	r_dot_v;
@@ -35,8 +41,7 @@ static t_color	get_specular(t_hitrec *hitrec, t_lumi *l)
 	r = vec_scale(r, n_dot_l);
 	r = vec_sub(r, l->light_ray.dir);
 	r_dot_v = vec_dot(r, vec_scale(hitrec->ray->dir, -1));
-
-	if (r_dot_v > 1e-6)
+	if (r_dot_v > T_MIN)
 	{
 		power = pow(r_dot_v / (vec_len(r) * vec_len(hitrec->ray->dir)), 100);
 		return (color_scale(color_new(1, 1, 1), power));

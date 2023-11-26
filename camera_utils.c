@@ -7,7 +7,7 @@
 #include "camera.h"
 #include "vec3d.h"
 
-int	get_focal_length(uint8_t fov)
+int	get_focal_length(const uint8_t fov)
 {
 	double	fov_rad;
 

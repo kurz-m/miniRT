@@ -4,12 +4,12 @@
 /**
  * @brief Main entry point for parsing the p given by the .rt file
  * 
- * @param scene Main structure holding all the objects and p attributes
+ * @param scene Main structure holding all the objects and scene attributes
  * @param fn Filename of the .rt file
  * @return true If the parsing of the p was successful
  * @return false If the parsing of the p was unsuccessful
  */
-bool	parse(t_scene *scene, char *fn);
+bool	parse(t_scene *scene, const char *fn);
 
 /**
  * @brief Parses a vector from a given string in the form a,b,c
@@ -125,16 +125,29 @@ bool	parse_int(int *val, char *s, int lower, int upper);
  */
 bool	parse_double(double *val, char *s, double lower, double upper);
 
-void	copy_lights(t_scene *scene, t_parse *parse);
+/**
+ * @brief Utility function to copy the light objects from the linked list
+ * into an array for optimized computing.
+ * @param scene Struct containing the current scene.
+ * @param parse Struct containing the parsed `.rt` file.
+ */
+void	copy_lights(t_scene *const scene, const t_parse *parse);
 
-void	copy_sphere(t_scene *scene, t_obj *obj, int i);
+/**
+ * @brief Main entry point for the copy functions. It loops through
+ * the linked list which contains the parsed objects from the `.rt`
+ * file and copies it into the array of objects into the scene struct.
+ * @param scene Struct containing the current scene.
+ * @param parse Struct containing the parsed `.rt` file.
+ */
+void	copy_objs(t_scene *scene, const t_parse *parse);
 
-void	copy_cylinder(t_scene *scene, t_obj *obj, int i);
-
-void	copy_plane(t_scene *scene, t_obj *obj, int i);
-
-void	copy_objs(t_scene *scene, t_parse *parse);
-
+/**
+ * @brief Utility function for parse_double to extract the integer and
+ * fractional part from the given string.
+ * @param s The string representing the double value.
+ * @return `double` The parsed double.
+ */
 double	ft_strtod(const char *s);
 
 #endif

@@ -9,7 +9,7 @@
 #include "ray.h"
 #include "hit.h"
 
-double	hit_plane(t_obj *obj, t_ray *ray, t_vec3d *norm)
+double	hit_plane(t_obj *obj, t_ray *ray, t_vec3d *const norm)
 {
 	double	denom;
 	double	t;

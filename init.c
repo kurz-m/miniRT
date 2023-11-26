@@ -5,7 +5,12 @@
 #include "vec3d.h"
 #include "init.h"
 
-static t_vec3d	calc_pixel_ul(t_cam *cam, t_vec3d cam_vec)
+/// @brief Utility function to calculate the upper left
+/// pixel of the viewport of the current scene.
+/// @param cam Struct holding all the camera properties.
+/// @param cam_vec Norm camera vector scaled with the focal length.
+/// @return Vector pointing to the upper left pixel.
+static t_vec3d	calc_pixel_ul(const t_cam *cam, const t_vec3d cam_vec)
 {
 	t_vec3d		corner;
 
@@ -16,6 +21,10 @@ static t_vec3d	calc_pixel_ul(t_cam *cam, t_vec3d cam_vec)
 	return (corner);
 }
 
+/// @brief Function for initializing the mlx window and image
+/// @param mlx Pointer to the mlx instance.
+/// @param image Pointer to the mlx image instance.
+/// @return `True` on success, `False` on fail.
 static bool	init_mlx(mlx_t **mlx, mlx_image_t **image)
 {
 	*mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
