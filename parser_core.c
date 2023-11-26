@@ -7,7 +7,16 @@
 #include "parse.h"
 #include "utils.h"
 
-static bool	parse_line(t_parse *p, char *line)
+/**
+ * @brief Utility function to parse a single line given
+ * by the get_next_line function.
+ * 
+ * @param p Struct containing the heads of the linked obj lists.
+ * @param line The string read from get_next_line.
+ * @return true If the parsing was successful.
+ * @return false If the parsing contained an error.
+ */
+static bool	parse_line(t_parse *p, const char *line)
 {
 	char	**args;
 	bool	ret;
@@ -35,6 +44,15 @@ static bool	parse_line(t_parse *p, char *line)
 	return (ret);
 }
 
+/**
+ * @brief Utility function to cleanup the parser. The flag specifies
+ * if, after a fail, the scene also needs to be cleaned up.
+ * 
+ * @param scene Struct containing the scene properties.
+ * @param parser Struct containing the parsed objects.
+ * @param flag Specifying what memory needs to be cleaned.
+ * @return false Hand down false to return it from the main parser.
+ */
 static bool	cleanup_parser(t_scene *scene, t_parse *parser, char flag)
 {
 	if (flag == 'B')
@@ -47,6 +65,17 @@ static bool	cleanup_parser(t_scene *scene, t_parse *parser, char flag)
 	return (false);
 }
 
+/**
+ * @brief Utility function to copy the objects from the linked list
+ * into the array of structs in the main scene struct. The function
+ * allocates memory for the lights and objects array. This array
+ * needs to be free'd from the calling function.
+ * 
+ * @param scene Main structure holding all the objects and scene attributes
+ * @param parse Struct holding the parsed objects
+ * @return true If copying was successful.
+ * @return false If copying failed.
+ */
 static bool	init_obj(t_scene *scene, t_parse *parse)
 {
 	int		light_size;
@@ -70,7 +99,7 @@ static bool	init_obj(t_scene *scene, t_parse *parse)
 	return (true);
 }
 
-bool	parse(t_scene *scene, char *filepath)
+bool	parse(t_scene *scene, const char *filepath)
 {
 	int		fd;
 	t_parse	parse;

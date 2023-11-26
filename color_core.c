@@ -10,7 +10,7 @@
 // ambient color model: the ambient color vector is used as a scale for the 
 // obj color. 
 // see here https://learnwebgl.brown37.net/09_lights/lights_ambient.html
-t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
+t_color	get_ambient_color(const t_scene *sc, const t_hitrec *hit)
 {
 	return ((t_color){
 		.r = hit->obj->color.r * sc->amb.color.r * sc->amb.ratio,
@@ -19,7 +19,7 @@ t_color	get_ambient_color(t_scene *sc, t_hitrec *hit)
 	});
 }
 
-t_color	get_background_color(t_ray *ray)
+t_color	get_background_color(const t_ray *ray)
 {
 	t_vec3d	unit_direction;
 	double	a;

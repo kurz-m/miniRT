@@ -9,7 +9,15 @@
 #include "ray.h"
 #include "hit.h"
 
-static double	hit_disk(t_obj *obj, t_ray *ray, double radius)
+/**
+ * @brief Utility function to calculate the hit point with a disk.
+ * 
+ * @param obj The current object.
+ * @param ray The current ray.
+ * @param radius The radius of the cylinder.
+ * @return double Calculated t for the ray formula: P(i) = A + t * dir
+ */
+static double	hit_disk(t_obj *obj, t_ray *ray, const double radius)
 {
 	double	t;
 	t_vec3d	norm;
@@ -29,6 +37,13 @@ static double	hit_disk(t_obj *obj, t_ray *ray, double radius)
 	return (-1.0);
 }
 
+/**
+ * @brief Utility function to calculate the hit point with the cylinder wall.
+ * 
+ * @param obj The current object.
+ * @param ray The current ray.
+ * @return double Calculated t for the ray formula: P(i) = A + t * dir
+ */
 static double	hit_cyl_wall(t_obj *obj, t_ray *ray)
 {
 	double	t;
@@ -55,7 +70,15 @@ static double	hit_cyl_wall(t_obj *obj, t_ray *ray)
 	return (t);
 }
 
-static int	find_smallest_pos_t(double *t)
+/**
+ * @brief Utility function to check for the closes hit point
+ * of the ray with the given cylinder.
+ * 
+ * @param t Calculated t for the ray formula: P(i) = A + t * dir
+ * @return int -1 if given t is bigger than current smallest t, otherwise
+ * given t.
+ */
+static int	find_smallest_pos_t(const double *t)
 {
 	int	i;
 	int	smallest_pos;
@@ -78,7 +101,15 @@ static int	find_smallest_pos_t(double *t)
 	return (smallest_pos);
 }
 
-static void	get_surf_norm_cyl(t_obj *obj, t_ray *ray, double t, t_vec3d *norm)
+/**
+ * @brief Function for calculating the norm vector to the cylinder surface.
+ * 
+ * @param obj The current cylinder object.
+ * @param ray The current ray.
+ * @param t The position of the ray at position t.
+ * @param norm Norm vector given as reference.
+ */
+static void	get_cyl_norm(t_obj *obj, t_ray *ray, double t, t_vec3d *const norm)
 {
 	t_vec3d	x;
 	double	m;
@@ -90,7 +121,7 @@ static void	get_surf_norm_cyl(t_obj *obj, t_ray *ray, double t, t_vec3d *norm)
 	*norm = vec_norm(vec_sub(vec_sub(p, obj->pos), vec_scale(obj->cy.dir, m)));
 }
 
-double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *norm)
+double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *const norm)
 {
 	double	t[3];
 	int		i;
@@ -111,6 +142,6 @@ double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *norm)
 	else if (i == 1)
 		*norm = vec_scale(obj->cy.dir, -1.);
 	else if (i == 2)
-		get_surf_norm_cyl(obj, ray, t[2], norm);
+		get_cyl_norm(obj, ray, t[2], norm);
 	return (t[i]);
 }

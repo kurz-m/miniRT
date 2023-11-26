@@ -74,7 +74,7 @@ submodules:
 	fi
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR) -B --no-print-directory
+	@+make -C $(LIBFT_DIR) -B --no-print-directory
 
 $(MLX42):
 	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
@@ -108,4 +108,4 @@ re: fclean multi
 .PHONY: all fclean clean re submodules multi
 
 multi: submodules
-	$(MAKE) -j8 all
+	@$(MAKE) -j8 all

@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "hit.h"
 
-void	copy_lights(t_scene *scene, t_parse *parse)
+void	copy_lights(t_scene *const scene, const t_parse *parse)
 {
 	t_list	*light;
 	t_obj	*content;
@@ -28,7 +28,14 @@ void	copy_lights(t_scene *scene, t_parse *parse)
 	}
 }
 
-void	copy_sphere(t_scene *scene, t_obj *obj, int i)
+/**
+ * @brief Utility function to copy a sphere object from the linked list
+ * into an array of objects for optimized computing.
+ * @param scene Struct containing the current scene.
+ * @param obj The current object from the parsed linked list.
+ * @param i The position of the current object in the object array.
+ */
+static void	copy_sphere(t_scene *const scene, const t_obj *obj, const int i)
 {
 	scene->objs[i] = (t_obj){
 		.type = obj->type,
@@ -39,7 +46,14 @@ void	copy_sphere(t_scene *scene, t_obj *obj, int i)
 	};
 }
 
-void	copy_cylinder(t_scene *scene, t_obj *obj, int i)
+/**
+ * @brief Utility function to copy a cylinder object from the linked list
+ * into an array of objects for optimized computing.
+ * @param scene Struct containing the current scene.
+ * @param obj The current object from the parsed linked list.
+ * @param i The position of the current object in the object array.
+ */
+static void	copy_cylinder(t_scene *const scene, const t_obj *obj, const int i)
 {
 	scene->objs[i] = (t_obj){
 		.type = obj->type,
@@ -52,7 +66,14 @@ void	copy_cylinder(t_scene *scene, t_obj *obj, int i)
 	};
 }
 
-void	copy_plane(t_scene *scene, t_obj *obj, int i)
+/**
+ * @brief Utility function to copy a plane object from the linked list
+ * into an array of objects for optimized computing.
+ * @param scene Struct containing the current scene.
+ * @param obj The current object from the parsed linked list.
+ * @param i The position of the current object in the object array.
+ */
+static void	copy_plane(t_scene *const scene, const t_obj *obj, const int i)
 {
 	scene->objs[i] = (t_obj){
 		.type = obj->type,
@@ -63,7 +84,7 @@ void	copy_plane(t_scene *scene, t_obj *obj, int i)
 	};
 }
 
-void	copy_objs(t_scene *scene, t_parse *parse)
+void	copy_objs(t_scene *const scene, const t_parse *parse)
 {
 	t_list	*obj;
 	t_obj	*curr_obj;

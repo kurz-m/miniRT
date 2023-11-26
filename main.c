@@ -15,7 +15,13 @@
 #include "hit.h"
 #include "render.h"
 
-void	*do_render(void *arg)
+/**
+ * @brief Main entry point for rendering the scene.
+ * 
+ * @param arg Argument structure containing the scene and the image struct.
+ * @return void* 
+ */
+static void	*do_render(void *arg)
 {
 	t_render	*render;
 	t_scene		*scene;
@@ -42,7 +48,12 @@ void	*do_render(void *arg)
 	return (NULL);
 }
 
-void	escape_hook(void *in)
+/**
+ * @brief Util function for establishing the ESC hook for closing the window.
+ * 
+ * @param in Pointer to the mlx and scene parameter.
+ */
+static void	escape_hook(void *in)
 {
 	t_param		*param;
 

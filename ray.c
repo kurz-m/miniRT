@@ -16,7 +16,7 @@ t_ray	ray_new(t_point3d origin, t_vec3d dir)
 	return (ray);
 }
 
-t_point3d	ray_at(t_ray *ray, double t)
+t_point3d	ray_at(const t_ray *ray, const double t)
 {
 	return (vec_add(ray->origin, vec_scale(ray->dir, t)));
 }

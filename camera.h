@@ -1,8 +1,21 @@
 #ifndef CAMERA_H
 # define CAMERA_H
 
-int		get_focal_length(uint8_t fov);
+/// @brief Utility function to calculate the focal length 
+/// from the given field of view.
+/// @param fov Field of view in the range of 0 - 180
+/// @return returns the focal length for the given scene.
+int		get_focal_length(const uint8_t fov);
+
+/// @brief Utility function to calculate the center of the
+/// currently rendered pixel.
+/// @param cam Struct that holds the camera properties.
+/// @param i Y-component of the current pixel.
+/// @param j X-component of the current pixel.
+/// @return Vector pointing to the center of the current pixel.
 t_vec3d	get_pixel_center(t_cam *cam, int i, int j);
+
+// FIXME: Check if we still need this for anti-aliasing
 t_vec3d	get_pixel_random(t_cam *cam, int i, int j);
 
 #endif
