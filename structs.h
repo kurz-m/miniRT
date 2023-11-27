@@ -128,6 +128,7 @@ struct	s_obj
 	t_color		color;
 	t_point3d	pos;
 	double		(*hit)(t_obj *obj, t_ray *ray, t_vec3d *norm);
+	int			s;
 	union
 	{
 		t_light		light;

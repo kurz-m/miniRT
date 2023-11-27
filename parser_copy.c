@@ -43,6 +43,7 @@ static void	copy_sphere(t_scene *const scene, const t_obj *obj, const int i)
 		.pos = obj->pos,
 		.hit = &hit_sphere,
 		.sp.diameter = obj->sp.diameter,
+		.s = obj->s,
 	};
 }
 
@@ -63,6 +64,7 @@ static void	copy_cylinder(t_scene *const scene, const t_obj *obj, const int i)
 		.cy.dir = obj->cy.dir,
 		.cy.diam = obj->cy.diam,
 		.cy.height = obj->cy.height,
+		.s = obj->s,
 	};
 }
 
@@ -81,6 +83,7 @@ static void	copy_plane(t_scene *const scene, const t_obj *obj, const int i)
 		.pos = obj->pos,
 		.hit = &hit_plane,
 		.pl.dir = obj->pl.dir,
+		.s = obj->s,
 	};
 }
 

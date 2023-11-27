@@ -14,7 +14,7 @@ bool	parse_ambient(t_parse *p, char **args)
 		return (ft_error(MULT_AMB, NULL, NULL));
 	if (ft_arrlen(args) != 3)
 		return (ft_error3(args, BAD_AMB));
-	if (!parse_color(&p->amb.color, args[2]))
+	if (!parse_color(&p->amb.color, args[2], NULL, NULL))
 		return (ft_error("ambient", args[2], BAD_COL));
 	if (!parse_double(&p->amb.ratio, args[1], 0, 1))
 		return (ft_error(args[1], "bad ambient ratio!", NULL));
@@ -53,7 +53,7 @@ bool	parse_lights(t_parse *p, char **args)
 		return (ft_error("light position", args[1], BAD_VEC));
 	if (!parse_double(&l.light.brightness, args[2], 0, 1))
 		return (ft_error("light brightness", args[2], BAD_DOUBLE));
-	if (ft_arrlen(args) == 4 && !parse_color(&l.color, args[3]))
+	if (ft_arrlen(args) == 4 && !parse_color(&l.color, args[3], NULL, NULL))
 		return (ft_error("light color", args[3], BAD_COL));
 	nl = malloc(sizeof(t_obj));
 	if (!nl)

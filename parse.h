@@ -99,7 +99,7 @@ bool	parse_cylinder(t_parse *p, char **args);
  * @return true If the parsing of the color was successful
  * @return false If the parsing of the color was unsuccessful
  */
-bool	parse_color(t_color *col, char *str);
+bool	parse_color(t_color *col, char *s_col, int *s, char *s_shiny);
 
 /**
  * @brief Helper function for parsing integers
