@@ -36,6 +36,8 @@ static t_color	get_specular(const t_hitrec *hitrec, const t_lumi *l)
 	double	n_dot_l;
 	double	power;
 
+	if (hitrec->obj->s <= 0)
+		return (color_new(0, 0, 0));
 	n_dot_l = vec_dot(hitrec->normal, l->light_ray.dir);
 	r = vec_scale(hitrec->normal, 2.0);
 	r = vec_scale(r, n_dot_l);
@@ -43,7 +45,8 @@ static t_color	get_specular(const t_hitrec *hitrec, const t_lumi *l)
 	r_dot_v = vec_dot(r, vec_scale(hitrec->ray->dir, -1));
 	if (r_dot_v > T_MIN)
 	{
-		power = pow(r_dot_v / (vec_len(r) * vec_len(hitrec->ray->dir)), 100);
+		power = pow(r_dot_v / (vec_len(r) * vec_len(hitrec->ray->dir)),
+			hitrec->obj->s);
 		return (color_scale(color_new(1, 1, 1), power));
 	}
 	return (color_new(0, 0, 0));

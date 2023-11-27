@@ -39,24 +39,26 @@ bool	parse_norm_vec(t_vec3d *vec, char *str)
 	return (true);
 }
 
-bool	parse_color(t_color *col, char *str)
+bool	parse_color(t_color *col, char *s_col, int *s, char *s_shiny)
 {
 	char	**args;
 	int		r;
 	int		g;
 	int		b;
 
-	args = ft_split(str, ',');
+	args = ft_split(s_col, ',');
 	if (!args || ft_arrlen(args) != 3)
-		return (free_arr(args), false);
+		return (free_arr(args), ft_error("color", s_col, BAD_COL));
 	if (!parse_int(&r, args[0], 0, 255)
 		|| !parse_int(&g, args[1], 0, 255)
 		|| !parse_int(&b, args[2], 0, 255))
-		return (free_arr(args), false);
+		return (free_arr(args), ft_error("color", s_col, BAD_COL));
 	col->r = (double)r / 255.;
 	col->g = (double)g / 255.;
 	col->b = (double)b / 255.;
 	free_arr(args);
+	if (s && !parse_int(s, s_shiny, 0, INT32_MAX))
+		return (ft_error("shinyness", s_shiny, BAD_SHNY));
 	return (true);
 }
 
@@ -66,6 +68,8 @@ bool	parse_int(int *val, char *s, int lower, int upper)
 	long long	num;
 
 	i = 0;
+	if (!s)
+		return (false);
 	if (s && s[i] && (s[i] == '+' || s[i] == '-'))
 		i++;
 	while (s && s[i])

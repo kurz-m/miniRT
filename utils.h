@@ -11,6 +11,8 @@
 # define BAD_DOUBLE "bad double value!"
 # define BAD_VEC "bad vector!"
 # define BAD_COL "bad color!"
+# define BAD_SHNY "bad shinyness value!"
+# define BAD_NUM_ARGS "not the correct number of args for this object!"
 # define BAD_SP "bad sphere definition!"
 # define BAD_PL "bad plane definition!"
 # define BAD_CY "bad cylinder definition!"
