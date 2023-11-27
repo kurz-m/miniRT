@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: makurz <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: flauer <flauer@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 16:16:36 by makurz            #+#    #+#             */
-/*   Updated: 2023/11/27 16:16:37 by makurz           ###   ########.fr       */
+/*   Updated: 2023/11/27 17:16:18 by flauer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		get_focal_length(const uint8_t fov);
 /// @param i Y-component of the current pixel.
 /// @param j X-component of the current pixel.
 /// @return Vector pointing to the center of the current pixel.
-t_vec3d	get_pixel_center(t_cam *cam, int i, int j);
+t_vec3d	get_pixel_center(t_cam *cam, double i, double j);
 
 // FIXME: Check if we still need this for anti-aliasing
 t_vec3d	get_pixel_random(t_cam *cam, int i, int j);
