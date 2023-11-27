@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: makurz <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: flauer <flauer@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 16:19:03 by makurz            #+#    #+#             */
-/*   Updated: 2023/11/27 16:19:04 by makurz           ###   ########.fr       */
+/*   Updated: 2023/11/27 17:15:56 by flauer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	get_focal_length(const uint8_t fov)
 	return (round((double)WIDTH / 2.0) / tan(fov_rad / 2.0));
 }
 
-t_vec3d	get_pixel_center(t_cam *cam, int i, int j)
+t_vec3d	get_pixel_center(t_cam *cam, double i, double j)
 {
 	t_vec3d	ret;
 

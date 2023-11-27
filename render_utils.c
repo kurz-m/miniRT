@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: makurz <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: flauer <flauer@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 16:17:51 by makurz            #+#    #+#             */
-/*   Updated: 2023/11/27 16:17:51 by makurz           ###   ########.fr       */
+/*   Updated: 2023/11/27 17:20:19 by flauer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,14 +107,24 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 
 t_color	get_px_color(t_scene *scene, int i, int j)
 {
-	t_point3d	pixel_center;
-	t_vec3d		ray_dir;
-	t_ray		ray;
-	t_color		color;
+	t_point3d			pixel_center;
+	t_vec3d				ray_dir;
+	t_ray				ray;
+	t_color				color;
+	static const double	fractk[] = {-0.35, 0, 0.35, -0.35, 0, 0.35, -0.35, 0, 0.35};
+	static const double	fractl[] = {-0.35, -0.35, -0.35, 0, 0, 0, 0.35, 0.35, 0.35};
+	int					k;
 
-	pixel_center = get_pixel_center(&scene->cam, i, j);
-	ray_dir = vec_sub(pixel_center, scene->cam.pov);
-	ray = ray_new(scene->cam.pov, ray_dir);
-	color = get_ray_color(scene, &ray);
+	k = 0;
+	color = color_new(0, 0, 0);
+	while (k < 9)
+	{
+		pixel_center = get_pixel_center(&scene->cam, i + fractk[k], j + fractl[k]);
+		ray_dir = vec_sub(pixel_center, scene->cam.pov);
+		ray = ray_new(scene->cam.pov, ray_dir);
+		color = color_add(color, get_ray_color(scene, &ray));
+		++k;
+	}
+	color = color_scale(color, (double)1/9);
 	return (color);
 }
