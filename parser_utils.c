@@ -67,6 +67,7 @@ bool	parse_int(int *val, char *s, int lower, int upper)
 	int			i;
 	long long	num;
 
+	*val = 0;
 	i = 0;
 	if (!s)
 		return (false);
