@@ -58,7 +58,7 @@ bool	parse_color(t_color *col, char *s_col, int *s, char *s_shiny)
 	col->b = (double)b / 255.;
 	free_arr(args);
 	if (s && !parse_int(s, s_shiny, 0, INT32_MAX))
-		return (ft_error("shinyness", s_shiny, BAD_SHNY));
+		return (ft_error("shininess", s_shiny, BAD_SHNY));
 	return (true);
 }
 
