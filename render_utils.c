@@ -6,7 +6,7 @@
 /*   By: flauer <flauer@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 16:17:51 by makurz            #+#    #+#             */
-/*   Updated: 2023/11/27 17:20:19 by flauer           ###   ########.fr       */
+/*   Updated: 2023/11/27 18:22:59 by makurz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,7 @@ t_color	get_diffuse_light(
 	});
 }
 
-/**
- * @brief Utility to get the specular component of the light.
- * 
- * @param hitrec Struct containing parameters of currect hit object.
- * @param l Struct containing the light parameters.
- * @return t_color The scaled color.
- */
-static t_color	get_specular(const t_hitrec *hitrec, const t_lumi *l)
+t_color	get_specular(const t_hitrec *hitrec, const t_lumi *l)
 {
 	t_vec3d	r;
 	double	r_dot_v;
@@ -89,42 +82,4 @@ t_color	get_obj_lumination(t_scene *scene, t_hitrec *hitrec)
 		}
 	}
 	return (l.color);
-}
-
-t_color	get_ray_color(t_scene *scene, t_ray *ray)
-{
-	t_hitrec	hitrec;
-	t_color		color;
-
-	hitrec.ray = ray;
-	color = color_new(0, 0, 0);
-	if (hit_objects(scene, ray, &hitrec))
-	{
-		return (color_add(color, get_obj_lumination(scene, &hitrec)));
-	}
-	return (get_background_color(ray));
-}
-
-t_color	get_px_color(t_scene *scene, int i, int j)
-{
-	t_point3d			pixel_center;
-	t_vec3d				ray_dir;
-	t_ray				ray;
-	t_color				color;
-	static const double	fractk[] = {-0.35, 0, 0.35, -0.35, 0, 0.35, -0.35, 0, 0.35};
-	static const double	fractl[] = {-0.35, -0.35, -0.35, 0, 0, 0, 0.35, 0.35, 0.35};
-	int					k;
-
-	k = 0;
-	color = color_new(0, 0, 0);
-	while (k < 9)
-	{
-		pixel_center = get_pixel_center(&scene->cam, i + fractk[k], j + fractl[k]);
-		ray_dir = vec_sub(pixel_center, scene->cam.pov);
-		ray = ray_new(scene->cam.pov, ray_dir);
-		color = color_add(color, get_ray_color(scene, &ray));
-		++k;
-	}
-	color = color_scale(color, (double)1/9);
-	return (color);
 }

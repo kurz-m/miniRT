@@ -6,7 +6,7 @@
 /*   By: makurz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 16:16:29 by makurz            #+#    #+#             */
-/*   Updated: 2023/11/27 16:16:30 by makurz           ###   ########.fr       */
+/*   Updated: 2023/11/27 18:15:12 by makurz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define HEIGHT 720
 # define T_MIN 1e-6
 # define T_MAX 1000
-# define AA_SAMPLES 10
+# define SAMPLES 10
 
 # ifndef THREAD_NO
 #  define THREAD_NO 16
