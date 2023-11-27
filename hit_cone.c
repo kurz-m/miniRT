@@ -121,7 +121,7 @@ static void	get_cone_norm(t_obj *obj, t_ray *ray, double t, t_vec3d *const norm)
 	m = vec_dot(ray->dir, vec_scale(obj->co.dir, t)) + vec_dot(x, obj->co.dir);
 	p = ray_at(ray, t);
 	*norm = vec_norm(vec_sub(vec_sub(p, obj->pos), vec_scale(obj->co.dir,
-		m * (1 + pow(obj->co.angle, 2)))));
+					m * (1 + pow(obj->co.angle, 2)))));
 }
 
 double	hit_cone(t_obj *obj, t_ray *ray, t_vec3d *const norm)
