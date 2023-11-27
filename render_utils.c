@@ -46,7 +46,7 @@ static t_color	get_specular(const t_hitrec *hitrec, const t_lumi *l)
 	if (r_dot_v > T_MIN)
 	{
 		power = pow(r_dot_v / (vec_len(r) * vec_len(hitrec->ray->dir)),
-			hitrec->obj->s);
+				hitrec->obj->s);
 		return (color_scale(color_new(1, 1, 1), power));
 	}
 	return (color_new(0, 0, 0));
