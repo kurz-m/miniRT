@@ -84,6 +84,8 @@ bool	parse_double(double *val, char *s, double lower, double upper)
 
 	i = 0;
 	point = false;
+	if (s == NULL)
+		return (false);
 	if (s && s[i] && (s[i] == '+' || s[i] == '-'))
 		i++;
 	while (s && s[i])
