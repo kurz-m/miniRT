@@ -77,7 +77,7 @@ $(LIBFT):
 	@+make -C $(LIBFT_DIR) -B --no-print-directory
 
 $(MLX42):
-	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j4
+	@cd $(MLX_DIR) && cmake -B build && cmake --build build -j16
 
 debug: CFLAGS += -g
 debug: fclean all
@@ -108,4 +108,4 @@ re: fclean multi
 .PHONY: all fclean clean re submodules multi
 
 multi: submodules
-	@$(MAKE) -j8 all
+	@$(MAKE) -j16 all
