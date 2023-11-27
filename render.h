@@ -6,7 +6,7 @@
 /*   By: makurz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 16:16:57 by makurz            #+#    #+#             */
-/*   Updated: 2023/11/27 16:16:58 by makurz           ###   ########.fr       */
+/*   Updated: 2023/11/27 18:24:29 by makurz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,14 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray);
  * @return t_color Calculated color of the current pixel.
  */
 t_color	get_px_color(t_scene *scene, int i, int j);
+
+/**
+ * @brief Utility to get the specular component of the light.
+ * 
+ * @param hitrec Struct containing parameters of currect hit object.
+ * @param l Struct containing the light parameters.
+ * @return t_color The scaled color.
+ */
+t_color	get_specular(const t_hitrec *hitrec, const t_lumi *l);
 
 #endif
