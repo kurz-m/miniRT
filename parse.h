@@ -9,7 +9,7 @@
  * @return true If the parsing of the p was successful
  * @return false If the parsing of the p was unsuccessful
  */
-bool	parse(t_scene *scene, const char *fn);
+bool		parse(t_scene *scene, const char *fn);
 
 /**
  * @brief Parses a vector from a given string in the form a,b,c
@@ -19,7 +19,7 @@ bool	parse(t_scene *scene, const char *fn);
  * @return true If the parsing of the vector was successful
  * @return false If the parsing of the vector was unsuccessful
  */
-bool	parse_vec(t_vec3d *vec, char *str);
+bool		parse_vec(t_vec3d *vec, char *str);
 
 /**
  * @brief Parses a norm vector from a given string in the form a,b,c
@@ -29,7 +29,7 @@ bool	parse_vec(t_vec3d *vec, char *str);
  * @return true If the parsing of the norm vector was successful
  * @return false If the parsing of the norm vector was unsuccessful
  */
-bool	parse_norm_vec(t_vec3d *vec, char *str);
+bool		parse_norm_vec(t_vec3d *vec, char *str);
 
 /**
  * @brief Parses the ambient light of the p from an array of strings
@@ -39,7 +39,7 @@ bool	parse_norm_vec(t_vec3d *vec, char *str);
  * @return true If the parsing of the ambient light was successful
  * @return false If the parsing of the ambient light was unsuccessful
  */
-bool	parse_ambient(t_parse *p, char **args);
+bool		parse_ambient(t_parse *p, char **args);
 
 /**
  * @brief Parses the camera of the p from an array of strings
@@ -49,7 +49,7 @@ bool	parse_ambient(t_parse *p, char **args);
  * @return true If the parsing of the camera was successful
  * @return false If the parsing of the camera was unsuccessful
  */
-bool	parse_cam(t_parse *p, char **args);
+bool		parse_cam(t_parse *p, char **args);
 
 /**
  * @brief Parses the lights of the p from an array of strings
@@ -59,7 +59,7 @@ bool	parse_cam(t_parse *p, char **args);
  * @return true If the parsing of the lights was successful
  * @return false If the parsing of the lights was unsuccessful
  */
-bool	parse_lights(t_parse *p, char **args);
+bool		parse_lights(t_parse *p, char **args);
 
 /**
  * @brief Parses the sphere object of the p from an array of strings
@@ -69,7 +69,7 @@ bool	parse_lights(t_parse *p, char **args);
  * @return true If the parsing of the sphere was successful
  * @return false If the parsing of the sphere was unsuccessful
  */
-bool	parse_sphere(t_parse *p, char **args);
+bool		parse_sphere(t_parse *p, char **args);
 
 /**
  * @brief Parses the plane object of the p from an array of strings
@@ -79,7 +79,7 @@ bool	parse_sphere(t_parse *p, char **args);
  * @return true If the parsing of the plane was successful
  * @return false If the parsing of the plane was unsuccessful
  */
-bool	parse_plane(t_parse *p, char **args);
+bool		parse_plane(t_parse *p, char **args);
 
 /**
  * @brief Parses the cylinder object of the p from an array of strings
@@ -89,7 +89,7 @@ bool	parse_plane(t_parse *p, char **args);
  * @return true If the parsing of the cylinder was successful
  * @return false If the parsing of the cylinder was unsuccessful
  */
-bool	parse_cylinder(t_parse *p, char **args);
+bool		parse_cylinder(t_parse *p, char **args);
 
 /**
  * @brief Parses the cone object of the p from an array of strings
@@ -99,7 +99,7 @@ bool	parse_cylinder(t_parse *p, char **args);
  * @return true If the parsing of the cone was successful
  * @return false If the parsing of the cone was unsuccessful
  */
-bool	parse_cone(t_parse *p, char **args);
+bool		parse_cone(t_parse *p, char **args);
 
 /**
  * @brief Parses the color from a string in the form of r,g,b
@@ -109,7 +109,7 @@ bool	parse_cone(t_parse *p, char **args);
  * @return true If the parsing of the color was successful
  * @return false If the parsing of the color was unsuccessful
  */
-bool	parse_color(t_color *col, char *s_col, int *s, char *s_shiny);
+bool		parse_color(t_color *col, char *s_col, int *s, char *s_shiny);
 
 /**
  * @brief Helper function for parsing integers
@@ -121,7 +121,7 @@ bool	parse_color(t_color *col, char *s_col, int *s, char *s_shiny);
  * @return true If the parsing of the integer was successful
  * @return false If the parsing of the integer was unsuccessful
  */
-bool	parse_int(int *val, char *s, int lower, int upper);
+bool		parse_int(int *val, char *s, int lower, int upper);
 
 /**
  * @brief Helper function for parsing doubles
@@ -133,7 +133,7 @@ bool	parse_int(int *val, char *s, int lower, int upper);
  * @return true If the parsing of the double was successful
  * @return false If the parsing of the double was unsuccessful
  */
-bool	parse_double(double *val, char *s, double lower, double upper);
+bool		parse_double(double *val, char *s, double lower, double upper);
 
 /**
  * @brief Main entry point for the copy functions. It loops through
@@ -142,7 +142,7 @@ bool	parse_double(double *val, char *s, double lower, double upper);
  * @param scene Struct containing the current scene.
  * @param parse Struct containing the parsed `.rt` file.
  */
-void	copy_objs(t_scene *scene, const t_parse *parse);
+void		copy_objs(t_scene *scene, const t_parse *parse);
 
 /**
  * @brief Utility function for parse_double to extract the integer and
@@ -150,6 +150,14 @@ void	copy_objs(t_scene *scene, const t_parse *parse);
  * @param s The string representing the double value.
  * @return `double` The parsed double.
  */
-double	ft_strtod(const char *s);
+double		ft_strtod(const char *s);
+
+/**
+ * @brief Get the function pointer to the parsing function corresponding
+ * to the object specifier
+ * @param id object specifier from .rt file
+ * @return t_parse_fcn function pointer to the parse function
+ */
+t_parse_fcn	get_parse_fcn(char *id);
 
 #endif

@@ -39,4 +39,6 @@ typedef struct s_render		t_render;
 
 typedef struct s_param		t_param;
 
+typedef bool				(*t_parse_fcn)(t_parse *p, char **args);
+
 #endif
