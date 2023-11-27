@@ -10,24 +10,18 @@
 static double	get_int_part(const char *s)
 {
 	double	num;
-	int		sign;
 	int		i;
 
 	num = 0;
-	sign = 1;
 	i = 0;
 	while (s[i] == '-' || s[i] == '+')
-	{
-		if (s[i] == '-')
-			sign *= -1;
 		i++;
-	}
 	while (s[i] && ft_isdigit(s[i]))
 	{
 		num = (num * 10) + (s[i] - '0');
 		i++;
 	}
-	return (sign * num);
+	return (num);
 }
 
 /**
@@ -62,9 +56,19 @@ static double	get_fract_part(const char *str)
 double	ft_strtod(const char *s)
 {
 	double	num;
+	int		sign;
+	int		i;
 
-	num = get_int_part(s);
-	if (num < 0)
+	i = 0;
+	sign = 1;
+	while (s[i] == '-' || s[i] == '+')
+	{
+		if (s[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	num = get_int_part(s) * sign;
+	if (sign < 0)
 		num -= get_fract_part(s);
 	else
 		num += get_fract_part(s);
