@@ -141,9 +141,9 @@ double	hit_cone(t_obj *obj, t_ray *ray, t_vec3d *const norm)
 	if (i == -1)
 		return (-1.0);
 	else if (i == 0)
-		*norm = obj->co.dir;
+		*norm = vec_scale(obj->co.dir, -1);
 	else if (i == 1)
-		*norm = vec_scale(obj->co.dir, -1.);
+		*norm = obj->co.dir;
 	else if (i == 2)
 		get_cone_norm(obj, ray, t[2], norm);
 	return (t[i]);
