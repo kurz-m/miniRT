@@ -80,3 +80,40 @@ bool	parse_cylinder(t_parse *p, char **args)
 	ft_lstadd_back(&(p->objects), ft_lstnew(cy));
 	return (true);
 }
+
+static bool	_parse_cone(t_obj *o, char **args)
+{
+	if (!parse_vec(&(o->pos), args[1]))
+		return (ft_error("cone pos", args[1], BAD_VEC));
+	if (!parse_norm_vec(&(o->co.dir), args[2]))
+		return (ft_error("cone direction", args[2], BAD_VEC));
+	if (!parse_double(&(o->co.angle), args[3], 0.1, 179.9))
+		return (ft_error("cone angle", args[3], BAD_DOUBLE));
+	if (!parse_double(&(o->co.min_m), args[4], -INFINITY, INFINITY))
+		return (ft_error("cone min_m", args[4], BAD_DOUBLE));
+	if (!parse_double(&(o->co.max_m), args[5], -INFINITY, INFINITY))
+		return (ft_error("cone max_m", args[5], BAD_DOUBLE));
+	if (!parse_color(&(o->color), args[6], &(o->s), args[7]))
+		return (ft_error("bad cone definition", NULL, NULL));
+	return (true);
+}
+
+bool	parse_cone(t_parse *p, char **args)
+{
+	t_obj	o;
+	t_obj	*co;
+
+	if (ft_arrlen(args) != 8)
+		return (ft_error3(args, BAD_NUM_ARGS));
+	o.type = CONE;
+	if (!_parse_cone(&o, args))
+		return (false);
+	co = malloc(sizeof(t_obj));
+	if (!co)
+		return (ft_error(MALLOC_ERR, NULL, NULL));
+	*co = (t_obj){.color = o.color, .co.dir = o.co.dir,
+		.pos = o.pos, .type = o.type, .co.angle = tan(o.co.angle / 2),
+		.s = o.s, .co.max_m = o.co.max_m, .co.min_m = o.co.min_m};
+	ft_lstadd_back(&(p->objects), ft_lstnew(co));
+	return (true);
+}

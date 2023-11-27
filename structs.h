@@ -88,6 +88,7 @@ enum e_type
 	SPHERE,
 	PLANE,
 	CYLINDER,
+	CONE,
 };
 
 struct	s_scene
@@ -122,6 +123,14 @@ struct	s_cylinder
 	double		height;
 };
 
+struct	s_cone
+{
+	t_vec3d		dir;
+	double		angle;
+	double		min_m;
+	double		max_m;
+};
+
 struct	s_obj
 {
 	t_type		type;
@@ -135,6 +144,7 @@ struct	s_obj
 		t_sphere	sp;
 		t_plane		pl;
 		t_cylinder	cy;
+		t_cone		co;
 	};
 };
 

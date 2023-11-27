@@ -7,25 +7,19 @@
 #include "utils.h"
 #include "hit.h"
 
-void	copy_lights(t_scene *const scene, const t_parse *parse)
+static void	copy_cone(t_scene *const scene, const t_obj *obj, const int i)
 {
-	t_list	*light;
-	t_obj	*content;
-	int		i;
-
-	i = 0;
-	light = parse->lights;
-	while (light)
-	{
-		content = (t_obj *)light->content;
-		scene->lights[i++] = (t_obj){
-			.type = content->type,
-			.color = content->color,
-			.pos = content->pos,
-			.light.brightness = content->light.brightness,
-		};
-		light = light->next;
-	}
+	scene->objs[i] = (t_obj){
+		.type = obj->type,
+		.color = obj->color,
+		.pos = obj->pos,
+		.hit = &hit_cone,
+		.co.dir = obj->co.dir,
+		.co.angle = obj->co.angle,
+		.co.min_m = obj->co.min_m,
+		.co.max_m = obj->co.max_m,
+		.s = obj->s,
+	};
 }
 
 /**
@@ -104,6 +98,8 @@ void	copy_objs(t_scene *const scene, const t_parse *parse)
 			copy_cylinder(scene, curr_obj, i);
 		else if (curr_obj->type == PLANE)
 			copy_plane(scene, curr_obj, i);
+		else if (curr_obj->type == CONE)
+			copy_cone(scene, curr_obj, i);
 		obj = obj->next;
 		++i;
 	}

@@ -92,6 +92,16 @@ bool	parse_plane(t_parse *p, char **args);
 bool	parse_cylinder(t_parse *p, char **args);
 
 /**
+ * @brief Parses the cone object of the p from an array of strings
+ * 
+ * @param p Main structure holding all the objects and p attributes
+ * @param args Array of strings holding the settings for the ambient light
+ * @return true If the parsing of the cone was successful
+ * @return false If the parsing of the cone was unsuccessful
+ */
+bool	parse_cone(t_parse *p, char **args);
+
+/**
  * @brief Parses the color from a string in the form of r,g,b
  * 
  * @param col Color struct holding the 3 colors red, green, and blue
@@ -124,14 +134,6 @@ bool	parse_int(int *val, char *s, int lower, int upper);
  * @return false If the parsing of the double was unsuccessful
  */
 bool	parse_double(double *val, char *s, double lower, double upper);
-
-/**
- * @brief Utility function to copy the light objects from the linked list
- * into an array for optimized computing.
- * @param scene Struct containing the current scene.
- * @param parse Struct containing the parsed `.rt` file.
- */
-void	copy_lights(t_scene *const scene, const t_parse *parse);
 
 /**
  * @brief Main entry point for the copy functions. It loops through
