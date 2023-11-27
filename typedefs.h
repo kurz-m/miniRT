@@ -21,6 +21,8 @@ typedef struct s_plane		t_plane;
 
 typedef struct s_cylinder	t_cylinder;
 
+typedef struct s_cone		t_cone;
+
 typedef struct s_ray		t_ray;
 
 typedef struct s_obj		t_obj;

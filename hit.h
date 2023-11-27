@@ -30,4 +30,11 @@ double	hit_plane(t_obj *obj, t_ray *ray, t_vec3d *const norm);
 /// @return -1.0 if no hit was found, otherwise the scalar for intersection
 double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *const norm);
 
+/// @brief Function for calculating intersections with a cone
+/// @param sp The cone object
+/// @param ray Ray being shot into the scene
+/// @param norm const reference to the surface norm vector
+/// @return -1.0 if no hit was found, otherwise the scalar for intersection
+double	hit_cone(t_obj *obj, t_ray *ray, t_vec3d *const norm);
+
 #endif

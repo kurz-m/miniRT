@@ -37,11 +37,40 @@ static bool	parse_line(t_parse *p, const char *line)
 		ret = parse_plane(p, args);
 	else if (args && ft_strncmp(args[0], "cy", 3) == 0)
 		ret = parse_cylinder(p, args);
+	else if (args && ft_strncmp(args[0], "co", 3) == 0)
+		ret = parse_cone(p, args);
 	else if (args && ft_strncmp(args[0], "#", 1) != 0)
 		return (ft_error(args[0], "bad object specifier", NULL),
 			free_arr(args), false);
 	free_arr(args);
 	return (ret);
+}
+
+/**
+ * @brief Utility function to copy the light objects from the linked list
+ * into an array for optimized computing.
+ * @param scene Struct containing the current scene.
+ * @param parse Struct containing the parsed `.rt` file.
+ */
+static void	copy_lights(t_scene *const scene, const t_parse *parse)
+{
+	t_list	*light;
+	t_obj	*content;
+	int		i;
+
+	i = 0;
+	light = parse->lights;
+	while (light)
+	{
+		content = (t_obj *)light->content;
+		scene->lights[i++] = (t_obj){
+			.type = content->type,
+			.color = content->color,
+			.pos = content->pos,
+			.light.brightness = content->light.brightness,
+		};
+		light = light->next;
+	}
 }
 
 /**
