@@ -29,3 +29,24 @@ double	hit_sphere(t_obj *obj, t_ray *ray, t_vec3d *const norm)
 		return (t);
 	}
 }
+
+double	hit_light(t_obj *obj, t_ray *ray)
+{
+	double	abc[3];
+	double	t;
+	double	disc;
+	t_vec3d	oc;
+
+	oc = vec_sub(ray->origin, obj->pos);
+	abc[0] = vec_sqr_len(ray->dir);
+	abc[1] = vec_dot(oc, ray->dir);
+	abc[2] = vec_sqr_len(oc) - (1);
+	disc = abc[1] * abc[1] - abc[0] * abc[2];
+	if (disc < 0)
+		return (-1.0);
+	else
+	{
+		t = (-abc[1] - sqrt(disc)) / abc[0];
+		return (t);
+	}
+}

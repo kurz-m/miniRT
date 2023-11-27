@@ -67,7 +67,7 @@ t_color	get_obj_lumination(t_scene *scene, t_hitrec *hitrec)
 		l.norm = hitrec->normal;
 		hit_objects(scene, &l.light_ray, &l.hit_light);
 		if (l.hit_light.t >= 0 && l.hit_light.t >= vec_len(vec_sub(
-					scene->lights[i].pos, hitrec->p)))
+					scene->lights[i].pos, hitrec->p)) - 1.01)
 		{
 			angle = fmax(vec_dot(l.norm, l.light_ray.dir), 0.0f);
 			l.color = color_add(l.color, get_diffuse_light(
@@ -86,9 +86,14 @@ t_color	get_ray_color(t_scene *scene, t_ray *ray)
 
 	hitrec.ray = ray;
 	color = color_new(0, 0, 0);
-	if (hit_objects(scene, ray, &hitrec))
+	hit_objects(scene, ray, &hitrec);
+	hit_lights(scene, ray, &hitrec);
+	if (hit_objects(scene, ray, &hitrec) || hit_lights(scene, ray, &hitrec))
 	{
-		return (color_add(color, get_obj_lumination(scene, &hitrec)));
+		if (hitrec.obj->type == LIGHT)
+			return (hitrec.obj->color);
+		else
+			return (color_add(color, get_obj_lumination(scene, &hitrec)));
 	}
 	return (get_background_color(ray));
 }

@@ -9,6 +9,8 @@
 /// @return true if new hit was found, false if not
 bool	hit_objects(t_scene *scene, t_ray *ray, t_hitrec *hitrec);
 
+bool	hit_lights(t_scene *scene, t_ray *ray, t_hitrec *hitrec);
+
 /// @brief Function for calculating intersections with a sphere
 /// @param sp The sphere object
 /// @param ray Ray being shot into the scene
@@ -36,5 +38,7 @@ double	hit_cylinder(t_obj *obj, t_ray *ray, t_vec3d *const norm);
 /// @param norm const reference to the surface norm vector
 /// @return -1.0 if no hit was found, otherwise the scalar for intersection
 double	hit_cone(t_obj *obj, t_ray *ray, t_vec3d *const norm);
+
+double	hit_light(t_obj *obj, t_ray *ray);
 
 #endif

@@ -9,6 +9,29 @@
 #include "ray.h"
 #include "hit.h"
 
+bool	hit_lights(t_scene *scene, t_ray *ray, t_hitrec *hitrec)
+{
+	int		i;
+	double	t;
+
+	hitrec->t = INFINITY;
+	i = 0;
+	while (i < scene->n_light)
+	{
+		t = hit_light(&(scene->lights[i]), ray);
+		if (T_MIN < t && t < hitrec->t)
+		{
+			hitrec->t = t;
+			hitrec->obj = &(scene->lights[i]);
+			hitrec->p = ray_at(ray, t);
+		}
+		i++;
+	}
+	if (hitrec->t == INFINITY)
+		return (false);
+	return (true);
+}
+
 bool	hit_objects(t_scene *scene, t_ray *ray, t_hitrec *hitrec)
 {
 	int		i;
