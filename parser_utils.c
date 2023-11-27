@@ -85,25 +85,21 @@ bool	parse_int(int *val, char *s, int lower, int upper)
 	return (true);
 }
 
-bool	parse_double(double *val, char *s, double lower, double upper)
+t_parse_fcn	get_parse_fcn(char *id)
 {
-	int		i;
-	bool	point;
+	static const char			*fcn_id[] = {"A", "C", "L", "sp", "pl",
+		"cy", "co", NULL};
+	static const t_parse_fcn	fcns[] = {&parse_ambient, &parse_cam,
+		&parse_lights, &parse_sphere, &parse_plane, &parse_cylinder,
+		&parse_cone, NULL};
+	int							i;
 
 	i = 0;
-	point = false;
-	if (s && s[i] && (s[i] == '+' || s[i] == '-'))
-		i++;
-	while (s && s[i])
+	while (fcn_id[i])
 	{
-		if (s[i] == '.' && !point)
-			point = true;
-		else if ((s[i] == '.' && point) || !ft_isdigit(s[i]))
-			return (ft_error(s, BAD_DOUBLE, NULL));
-		i++;
+		if (ft_strncmp(id, fcn_id[i], ft_strlen(fcn_id[i]) + 1) == 0)
+			return (fcns[i]);
+		++i;
 	}
-	*val = ft_strtod(s);
-	if (*val > upper || *val < lower)
-		return (ft_error(s, "double value out of bounds!", NULL));
-	return (true);
+	return (NULL);
 }

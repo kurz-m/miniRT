@@ -18,28 +18,20 @@
  */
 static bool	parse_line(t_parse *p, const char *line)
 {
-	char	**args;
-	bool	ret;
+	char		**args;
+	bool		ret;
+	t_parse_fcn	fcn;
 
 	ret = true;
 	if (line && ft_strlen(line) == 0)
 		return (true);
 	args = ft_split(line, ' ');
-	if (args && ft_strncmp(args[0], "A", 2) == 0)
-		ret = parse_ambient(p, args);
-	else if (args && ft_strncmp(args[0], "C", 2) == 0)
-		ret = parse_cam(p, args);
-	else if (args && ft_strncmp(args[0], "L", 2) == 0)
-		ret = parse_lights(p, args);
-	else if (args && ft_strncmp(args[0], "sp", 3) == 0)
-		ret = parse_sphere(p, args);
-	else if (args && ft_strncmp(args[0], "pl", 3) == 0)
-		ret = parse_plane(p, args);
-	else if (args && ft_strncmp(args[0], "cy", 3) == 0)
-		ret = parse_cylinder(p, args);
-	else if (args && ft_strncmp(args[0], "co", 3) == 0)
-		ret = parse_cone(p, args);
-	else if (args && ft_strncmp(args[0], "#", 1) != 0)
+	if (!args)
+		return (false);
+	fcn = get_parse_fcn(args[0]);
+	if (fcn)
+		ret = fcn(p, args);
+	else if (ft_strncmp(args[0], "#", 1) != 0)
 		return (ft_error(args[0], "bad object specifier", NULL),
 			free_arr(args), false);
 	free_arr(args);

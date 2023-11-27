@@ -1,5 +1,7 @@
 #include <math.h>
 #include "libft.h"
+#include "defines.h"
+#include "utils.h"
 
 /**
  * @brief Utility function to get the integer part of the double.
@@ -73,4 +75,27 @@ double	ft_strtod(const char *s)
 	else
 		num += get_fract_part(s);
 	return (num);
+}
+
+bool	parse_double(double *val, char *s, double lower, double upper)
+{
+	int		i;
+	bool	point;
+
+	i = 0;
+	point = false;
+	if (s && s[i] && (s[i] == '+' || s[i] == '-'))
+		i++;
+	while (s && s[i])
+	{
+		if (s[i] == '.' && !point)
+			point = true;
+		else if ((s[i] == '.' && point) || !ft_isdigit(s[i]))
+			return (ft_error(s, BAD_DOUBLE, NULL));
+		i++;
+	}
+	*val = ft_strtod(s);
+	if (*val > upper || *val < lower)
+		return (ft_error(s, "double value out of bounds!", NULL));
+	return (true);
 }
